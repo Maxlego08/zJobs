@@ -1,0 +1,9 @@
+name: zJobs
+author: Maxlego08
+main: fr.maxlego08.jobs.ZJobsPlugin
+website: https://groupez.dev
+description: Make your own jobs
+version: ${project.version}
+api-version: 1.13
+folia-supported: true
+commands:
