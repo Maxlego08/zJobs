@@ -11,14 +11,19 @@ formula: "baseExperience * (1 + 0.05 * level + 0.005 * level^2) * (1 + 0.3 * (pr
 actions:
   - type: BLOCK_BREAK
     material: STONE
-    experience: 1
+    experience: 0.5
     money: 0.2
   - type: BLOCK_BREAK
     tag: LOGS
-    experience: 1
+    experience: 2
     money: 0.2
 
 rewards:
+  - level: -1
+    prestige: -1
+    actions:
+      - type: sound
+        sound: ENTITY_PLAYER_LEVELUP
   - level: 5
     prestige: 1
     actions:
@@ -32,4 +37,4 @@ rewards:
       - type: console_commands
         commands:
           - "eco give %player% 500"
-          - "bc %player% just passed to level 5 of the miner jobs!"
+          - "bc %player% just passed to level 10 of the miner jobs!"

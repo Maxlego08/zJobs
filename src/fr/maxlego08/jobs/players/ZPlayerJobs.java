@@ -5,11 +5,16 @@ import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobAction;
 import fr.maxlego08.jobs.api.JobActionType;
 import fr.maxlego08.jobs.api.JobManager;
+import fr.maxlego08.jobs.api.JobReward;
 import fr.maxlego08.jobs.api.players.PlayerJob;
 import fr.maxlego08.jobs.api.players.PlayerJobs;
 import fr.maxlego08.jobs.api.storage.StorageManager;
 import fr.maxlego08.jobs.bossbar.JobBossBar;
 import fr.maxlego08.jobs.zcore.utils.ElapsedTime;
+import fr.maxlego08.menu.MenuPlugin;
+import fr.maxlego08.menu.api.requirement.Action;
+import fr.maxlego08.menu.api.utils.Placeholders;
+import fr.maxlego08.menu.inventory.inventories.InventoryDefault;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -135,7 +140,11 @@ public class ZPlayerJobs implements PlayerJobs {
                 // ToDo
             }
 
-            if (this.jobBossBar != null) this.jobBossBar.updateMaxExperience(job.getExperience(playerJob.getLevel(), playerJob.getPrestige()));
+            processReward(player, job, playerJob.getLevel(), playerJob.getLevel() - 1, playerJob.getPrestige(), playerJob.getPrestige() - 1);
+
+            if (this.jobBossBar != null) {
+                this.jobBossBar.updateMaxExperience(job.getExperience(playerJob.getLevel(), playerJob.getPrestige()));
+            }
             updateBossBar(player, playerJob, job);
 
             if (remainingExperience > 0) {
@@ -147,6 +156,30 @@ public class ZPlayerJobs implements PlayerJobs {
             StorageManager storageManager = plugin.getStorageManager();
             storageManager.upsert(uniqueId, playerJob, false);
         }
+    }
+
+    private void processReward(Player player, Job job, int newLevel, int oldLevel, int newPrestige, int oldPrestige) {
+
+        Placeholders placeholders = new Placeholders();
+        placeholders.register("level", String.valueOf(newLevel));
+        placeholders.register("previous-level", String.valueOf(oldLevel));
+        placeholders.register("prestige", String.valueOf(newPrestige));
+        placeholders.register("previous-prestige", String.valueOf(oldPrestige));
+
+        InventoryDefault inventoryDefault = new InventoryDefault();
+        inventoryDefault.setPlugin(MenuPlugin.getInstance());
+
+        this.plugin.getScheduler().runTask(player.getLocation(), () -> {
+            for (JobReward reward : job.getRewards()) {
+                int rewardLevel = reward.getLevel();
+                int rewardPrestige = reward.getPrestige();
+                if ((rewardLevel == -1 || rewardLevel == newLevel) && (rewardPrestige == -1 || rewardPrestige == newPrestige)) {
+                    for (Action rewardAction : reward.getActions()) {
+                        rewardAction.preExecute(player, null, inventoryDefault, placeholders);
+                    }
+                }
+            }
+        });
     }
 
     private void updateBossBar(Player player, PlayerJob playerJob, Job job) {

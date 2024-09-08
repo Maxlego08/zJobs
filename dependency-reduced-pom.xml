@@ -147,8 +147,9 @@
     <dependency>
       <groupId>com.github.Maxlego08</groupId>
       <artifactId>zMenu-APi</artifactId>
-      <version>1.0.3.1</version>
-      <scope>provided</scope>
+      <version>1.0.3.4</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/libs/zmenu-1.0.3.4.jar</systemPath>
     </dependency>
   </dependencies>
   <properties>
