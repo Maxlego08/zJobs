@@ -111,10 +111,10 @@ public class ZJob implements Job {
             if (adjustedLevel >= 0 && adjustedLevel < this.matrix.length && prestige >= 0 && prestige < this.matrix[adjustedLevel].length) {
                 return this.matrix[adjustedLevel][prestige];
             } else {
-                return 0;
+                return 1;
             }
         } catch (Exception ignored) {
-            return 0;
+            return 1;
         }
     }
 
