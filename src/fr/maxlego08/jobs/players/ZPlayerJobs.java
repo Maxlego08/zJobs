@@ -50,7 +50,7 @@ public class ZPlayerJobs implements PlayerJobs {
             jobs.add(playerJob);
 
             StorageManager storageManager = plugin.getStorageManager();
-            storageManager.upsert(this.uniqueId, playerJob);
+            storageManager.upsert(this.uniqueId, playerJob, true);
         }
     }
 
@@ -116,7 +116,6 @@ public class ZPlayerJobs implements PlayerJobs {
         playerJob.process(experience);
 
         double maxExperience = job.getExperience(playerJob.getLevel(), playerJob.getPrestige());
-        System.out.println(experience + " - " + playerJob.getExperience() + " >= " + maxExperience);
 
         // On peut augmenter le niveau du jouer
         if (playerJob.getExperience() >= maxExperience) {
@@ -125,8 +124,6 @@ public class ZPlayerJobs implements PlayerJobs {
             // Mise à jour du niveau
             playerJob.nextLevel();
             playerJob.setExperience(0);
-
-            System.out.println(playerJob.getLevel() + " > " + job.getMaxLevels() + " - " + playerJob.getPrestige() + " -- " + remainingExperience);
 
             // On vérifie si on peut changer de prestige
             if (playerJob.getLevel() > job.getMaxLevels()) {
@@ -144,7 +141,7 @@ public class ZPlayerJobs implements PlayerJobs {
 
         if (initialCall) {
             StorageManager storageManager = plugin.getStorageManager();
-            storageManager.upsert(uniqueId, playerJob);
+            storageManager.upsert(uniqueId, playerJob, false);
         }
     }
 }

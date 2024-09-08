@@ -21,13 +21,18 @@ import fr.maxlego08.sarah.logger.JULogger;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class ZStorageManager implements StorageManager {
 
     private final ZJobsPlugin plugin;
+    private final Map<UUID, Long> lastUpdateTime = new ConcurrentHashMap<>();
+    private final Map<UUID, PlayerJob> pendingUpdates = new ConcurrentHashMap<>();
     private DatabaseConnection connection;
     private RequestHelper requestHelper;
 
@@ -58,13 +63,13 @@ public class ZStorageManager implements StorageManager {
         this.requestHelper = new RequestHelper(this.connection, JULogger.from(plugin.getLogger()));
 
         if (!this.connection.isValid()) {
-            plugin.getLogger().severe("Unable to connect to database !");
+            plugin.getLogger().severe("Unable to connect to database!");
             Bukkit.getPluginManager().disablePlugin(plugin);
         } else {
             if (storageType == StorageType.SQLITE) {
-                plugin.getLogger().info("The database connection is valid ! (SQLITE)");
+                plugin.getLogger().info("The database connection is valid! (SQLITE)");
             } else {
-                plugin.getLogger().info("The database connection is valid ! (" + connection.getDatabaseConfiguration().getHost() + ")");
+                plugin.getLogger().info("The database connection is valid! (" + connection.getDatabaseConfiguration().getHost() + ")");
             }
         }
 
@@ -74,6 +79,8 @@ public class ZStorageManager implements StorageManager {
         MigrationManager.registerMigration(new CreateJobPlayerMigration());
 
         MigrationManager.execute(this.connection, JULogger.from(this.plugin.getLogger()));
+
+        startUpdateTask();
     }
 
     @Override
@@ -83,14 +90,57 @@ public class ZStorageManager implements StorageManager {
     }
 
     @Override
-    public void upsert(UUID uniqueId, PlayerJob playerJob) {
-        this.plugin.getScheduler().runTaskAsynchronously(() -> this.requestHelper.upsert("%prefix%jobs", table -> {
-            table.uuid("unique_id", uniqueId).primary();
-            table.string("job_id", playerJob.getJobId()).primary();
-            table.bigInt("level", playerJob.getLevel());
-            table.bigInt("prestige", playerJob.getPrestige());
-            table.decimal("experience", playerJob.getExperience());
-        }));
+    public void upsert(UUID uniqueId, PlayerJob playerJob, boolean force) {
+
+        if (force) {
+            executeUpsert(uniqueId, playerJob);
+            return;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        long lastTime = lastUpdateTime.getOrDefault(uniqueId, 0L);
+
+        if (currentTime - lastTime < 5000) {
+            pendingUpdates.put(uniqueId, playerJob);
+            return;
+        }
+
+        executeUpsert(uniqueId, playerJob);
+        lastUpdateTime.put(uniqueId, currentTime);
+    }
+
+    private void executeUpsert(UUID uniqueId, PlayerJob playerJob) {
+        this.plugin.getScheduler().runTaskAsynchronously(() -> {
+            this.requestHelper.upsert("%prefix%jobs", table -> {
+                table.uuid("unique_id", uniqueId).primary();
+                table.string("job_id", playerJob.getJobId()).primary();
+                table.bigInt("level", playerJob.getLevel());
+                table.bigInt("prestige", playerJob.getPrestige());
+                table.decimal("experience", playerJob.getExperience());
+            });
+        });
+    }
+
+    private void startUpdateTask() {
+        this.plugin.getScheduler().runTaskTimerAsynchronously(100L, 100L, () -> {
+            long currentTime = System.currentTimeMillis();
+
+            Iterator<Map.Entry<UUID, PlayerJob>> iterator = pendingUpdates.entrySet().iterator();
+
+            while (iterator.hasNext()) {
+                Map.Entry<UUID, PlayerJob> entry = iterator.next();
+                UUID uniqueId = entry.getKey();
+                PlayerJob playerJob = entry.getValue();
+
+                long lastTime = lastUpdateTime.getOrDefault(uniqueId, 0L);
+
+                if (currentTime - lastTime >= 5000) {
+                    executeUpsert(uniqueId, playerJob);
+                    lastUpdateTime.put(uniqueId, currentTime);
+                    iterator.remove();
+                }
+            }
+        });
     }
 
     @Override

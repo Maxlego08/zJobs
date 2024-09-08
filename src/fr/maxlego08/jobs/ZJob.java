@@ -120,10 +120,6 @@ public class ZJob implements Job {
 
     @Override
     public Optional<JobAction<?>> getAction(JobActionType action, Object target) {
-        System.out.println(this.jobActions.size() + " -< ");
-        return this.jobActions.stream().filter(jobAction -> {
-            System.out.println(jobAction.getType() + " == " + action + " -> " + target);
-            return jobAction.getType() == action && jobAction.isAction(target);
-        }).findFirst();
+        return this.jobActions.stream().filter(jobAction -> jobAction.getType() == action && jobAction.isAction(target)).findFirst();
     }
 }

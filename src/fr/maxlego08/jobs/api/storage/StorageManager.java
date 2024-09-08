@@ -11,7 +11,7 @@ public interface StorageManager {
 
     PlayerJobs loadPlayerJobs(UUID uniqueId);
 
-    void upsert(UUID uniqueId, PlayerJob playerJob);
+    void upsert(UUID uniqueId, PlayerJob playerJob, boolean force);
 
     void deleteJob(UUID uniqueId, String fileName);
 }
