@@ -1,13 +1,16 @@
 package fr.maxlego08.jobs;
 
 import fr.maxlego08.jobs.api.JobManager;
+import fr.maxlego08.jobs.api.storage.StorageManager;
 import fr.maxlego08.jobs.command.commands.CommandJobs;
 import fr.maxlego08.jobs.placeholder.LocalPlaceholder;
 import fr.maxlego08.jobs.save.Config;
 import fr.maxlego08.jobs.save.MessageLoader;
+import fr.maxlego08.jobs.storage.ZStorageManager;
 import fr.maxlego08.jobs.zcore.ZPlugin;
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
+import fr.maxlego08.menu.api.scheduler.ZScheduler;
 
 /**
  * System to create your plugins very simply Projet:
@@ -18,6 +21,7 @@ import fr.maxlego08.menu.api.InventoryManager;
 public class ZJobsPlugin extends ZPlugin {
 
     private final JobManager jobManager = new ZJobManager(this);
+    private final StorageManager storageManager = new ZStorageManager(this);
     private InventoryManager inventoryManager;
     private ButtonManager buttonManager;
 
@@ -38,9 +42,11 @@ public class ZJobsPlugin extends ZPlugin {
         this.addSave(new MessageLoader(this));
         this.addListener(new JobListener(this));
 
-        Config.getInstance().loadConfiguration(getConfig());
         this.jobManager.loadJobs();
+        Config.getInstance().loadConfiguration(getConfig(), this);
         this.loadFiles();
+
+        this.storageManager.load();
 
         this.postEnable();
     }
@@ -70,8 +76,16 @@ public class ZJobsPlugin extends ZPlugin {
     @Override
     public void reloadFiles() {
         this.reloadConfig();
-        Config.getInstance().loadConfiguration(getConfig());
         this.jobManager.loadJobs();
+        Config.getInstance().loadConfiguration(getConfig(), this);
         super.reloadFiles();
+    }
+
+    public StorageManager getStorageManager() {
+        return storageManager;
+    }
+
+    public ZScheduler getScheduler() {
+        return this.inventoryManager.getScheduler();
     }
 }

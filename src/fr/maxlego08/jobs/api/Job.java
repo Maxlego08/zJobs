@@ -1,6 +1,7 @@
 package fr.maxlego08.jobs.api;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface Job {
 
@@ -26,4 +27,5 @@ public interface Job {
 
     double getExperience(int level, int prestige);
 
+    Optional<JobAction<?>> getAction(JobActionType action, Object target);
 }

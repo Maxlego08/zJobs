@@ -2,6 +2,7 @@ package fr.maxlego08.jobs;
 
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobAction;
+import fr.maxlego08.jobs.api.JobActionType;
 import fr.maxlego08.jobs.api.JobReward;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -9,6 +10,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ZJob implements Job {
 
@@ -31,11 +33,11 @@ public class ZJob implements Job {
         this.formula = formula;
         this.jobActions = jobActions;
         this.jobRewards = jobRewards;
-        this.matrix = new double[this.maxLevels][this.maxPrestiges];
+        this.matrix = new double[this.maxLevels][this.maxPrestiges + 1];
 
-        for (int prestige = 1; prestige <= this.maxPrestiges; prestige++) {
+        for (int prestige = 0; prestige <= this.maxPrestiges; prestige++) {
             for (int level = 1; level <= this.maxLevels; level++) {
-                this.matrix[level - 1][prestige - 1] = getExperienceForNextLevel(level, prestige);
+                this.matrix[level - 1][prestige] = getExperienceForNextLevel(level, prestige);
             }
         }
     }
@@ -105,10 +107,9 @@ public class ZJob implements Job {
     public double getExperience(int level, int prestige) {
         try {
             int adjustedLevel = level - 1;
-            int adjustedPrestige = prestige - 1;
 
-            if (adjustedLevel >= 0 && adjustedLevel < this.matrix.length && adjustedPrestige >= 0 && adjustedPrestige < this.matrix[adjustedLevel].length) {
-                return this.matrix[adjustedLevel][adjustedPrestige];
+            if (adjustedLevel >= 0 && adjustedLevel < this.matrix.length && prestige >= 0 && prestige < this.matrix[adjustedLevel].length) {
+                return this.matrix[adjustedLevel][prestige];
             } else {
                 return 0;
             }
@@ -117,4 +118,12 @@ public class ZJob implements Job {
         }
     }
 
+    @Override
+    public Optional<JobAction<?>> getAction(JobActionType action, Object target) {
+        System.out.println(this.jobActions.size() + " -< ");
+        return this.jobActions.stream().filter(jobAction -> {
+            System.out.println(jobAction.getType() + " == " + action + " -> " + target);
+            return jobAction.getType() == action && jobAction.isAction(target);
+        }).findFirst();
+    }
 }

@@ -4,7 +4,7 @@ import fr.maxlego08.jobs.api.JobAction;
 
 public abstract class ZJobAction<T> implements JobAction<T> {
 
-    private final T target;
+    protected final T target;
     private final double experience;
     private final double money;
 
@@ -27,5 +27,14 @@ public abstract class ZJobAction<T> implements JobAction<T> {
     @Override
     public double getMoney() {
         return this.money;
+    }
+
+    @Override
+    public String toString() {
+        return "ZJobAction{" +
+                "target=" + target +
+                ", experience=" + experience +
+                ", money=" + money +
+                '}';
     }
 }

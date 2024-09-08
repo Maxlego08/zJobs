@@ -58,7 +58,6 @@ public class JobLoader implements Loader<Job> {
             TypedMapAccessor accessor = new TypedMapAccessor((Map<String, Object>) map);
             double experience = accessor.getDouble("experience", 0);
             double money = accessor.getDouble("money", 0);
-            Object object = null;
             try {
 
                 JobActionType jobActionType = JobActionType.valueOf(accessor.getString("type").toUpperCase());

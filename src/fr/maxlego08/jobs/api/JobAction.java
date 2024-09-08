@@ -9,4 +9,6 @@ public interface JobAction<T> {
     double getExperience();
 
     double getMoney();
+
+    boolean isAction(Object target);
 }

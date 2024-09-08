@@ -11,6 +11,11 @@ public class BlockAction extends ZJobAction<Material> {
 
     @Override
     public JobActionType getType() {
-        return JobActionType.BLOCK_PLACE;
+        return JobActionType.BLOCK_BREAK;
+    }
+
+    @Override
+    public boolean isAction(Object target) {
+        return target instanceof Material material && material == this.target;
     }
 }

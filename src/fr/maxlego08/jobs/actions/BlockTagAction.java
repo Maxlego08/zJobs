@@ -12,6 +12,11 @@ public class BlockTagAction extends ZJobAction<Tag<Material>> {
 
     @Override
     public JobActionType getType() {
-        return JobActionType.BLOCK_PLACE;
+        return JobActionType.BLOCK_BREAK;
+    }
+
+    @Override
+    public boolean isAction(Object target) {
+        return target instanceof Material material && this.target.isTagged(material);
     }
 }
