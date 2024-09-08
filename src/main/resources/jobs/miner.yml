@@ -1,0 +1,35 @@
+name: "Miner"
+
+base-experience: 100
+
+max-levels: 100
+
+max-prestiges: 10
+
+formula: "baseExperience * (1 + 0.05 * level + 0.005 * level^2) * (1 + 0.3 * (prestige / maxPrestiges))"
+
+actions:
+  - type: BLOCK_BREAK
+    material: STONE
+    experience: 1
+    money: 0.2
+  - type: BLOCK_BREAK
+    tag: LOGS
+    experience: 1
+    money: 0.2
+
+rewards:
+  - level: 5
+    prestige: 1
+    actions:
+      - type: console_commands
+        commands:
+          - "eco give %player% 500"
+          - "bc %player% just passed to level 5 of the miner jobs!"
+  - level: 10
+    prestige: 1
+    actions:
+      - type: console_commands
+        commands:
+          - "eco give %player% 500"
+          - "bc %player% just passed to level 5 of the miner jobs!"

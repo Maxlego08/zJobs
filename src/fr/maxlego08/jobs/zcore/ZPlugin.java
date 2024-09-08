@@ -204,7 +204,7 @@ public abstract class ZPlugin extends JavaPlugin {
     /**
      * @return the inventoryManager
      */
-    public ZInventoryManager getInventoryManager() {
+    public ZInventoryManager getZInventoryManager() {
         return inventoryManager;
     }
 

@@ -73,6 +73,10 @@
                             <pattern>fr.maxlego08.sarah</pattern>
                             <shadedPattern>fr.maxlego08.jobs.zcore.utils.sarah</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>net.objecthunter.exp4j</pattern>
+                            <shadedPattern>fr.maxlego08.jobs.zcore.utils.exp4j</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -83,6 +87,14 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -154,6 +166,11 @@
             <artifactId>zMenu-APi</artifactId>
             <version>1.0.3.1</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.objecthunter</groupId>
+            <artifactId>exp4j</artifactId>
+            <version>0.4.8</version>
         </dependency>
     </dependencies>
 </project>

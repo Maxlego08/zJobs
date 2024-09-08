@@ -1,0 +1,7 @@
+# Enables detailed information display in the console.
+# If you encounter an issue, enable this option and send the errors to support.
+enable-debug: true
+
+# Enables execution time debugging to measure plugin performance.
+# Useful for identifying bottlenecks and optimizing performance.
+enable-debug-time: false

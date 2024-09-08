@@ -75,7 +75,18 @@
               <pattern>fr.maxlego08.sarah</pattern>
               <shadedPattern>fr.maxlego08.jobs.zcore.utils.sarah</shadedPattern>
             </relocation>
+            <relocation>
+              <pattern>net.objecthunter.exp4j</pattern>
+              <shadedPattern>fr.maxlego08.jobs.zcore.utils.exp4j</shadedPattern>
+            </relocation>
           </relocations>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>16</source>
+          <target>16</target>
         </configuration>
       </plugin>
     </plugins>
