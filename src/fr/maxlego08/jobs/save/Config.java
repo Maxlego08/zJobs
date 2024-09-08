@@ -3,8 +3,10 @@ package fr.maxlego08.jobs.save;
 import fr.maxlego08.jobs.ZJobsPlugin;
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobManager;
+import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,9 @@ public class Config {
     public static boolean enableDebug = true;
     public static boolean enableDebugTime = false;
     public static List<Job> defaultJobs = new ArrayList<>();
+    public static DecimalFormat decimalFormat;
+    public static BossBar.Color progressionBarColor;
+    public static BossBar.Overlay progressionBarOverlay;
 
     /**
      * static Singleton instance.
@@ -49,6 +54,10 @@ public class Config {
         enableDebug = configuration.getBoolean("enable-debug");
         enableDebugTime = configuration.getBoolean("enable-debug-time");
         defaultJobs = configuration.getStringList("default-jobs").stream().map(jobManager::getJob).filter(Optional::isPresent).map(Optional::get).toList();
+        decimalFormat = new DecimalFormat(configuration.getString("decimal-format", "#.##"));
+
+        progressionBarColor = BossBar.Color.valueOf(configuration.getString("progression-bar.color", "WHITE").toUpperCase());
+        progressionBarOverlay = BossBar.Overlay.valueOf(configuration.getString("progression-bar.overlay", "PROGRESS").toUpperCase());
     }
 
 }

@@ -31,8 +31,9 @@ import java.util.stream.Collectors;
 public class ZStorageManager implements StorageManager {
 
     private final ZJobsPlugin plugin;
-    private final Map<UUID, Long> lastUpdateTime = new ConcurrentHashMap<>();
-    private final Map<UUID, PlayerJob> pendingUpdates = new ConcurrentHashMap<>();
+    // Map qui contient une map pour chaque joueur (UUID), chaque map contient les PlayerJob avec jobId comme clé
+    private final Map<UUID, Map<String, PlayerJob>> pendingUpdates = new ConcurrentHashMap<>();
+    private final Map<UUID, Map<String, Long>> lastUpdateTime = new ConcurrentHashMap<>();
     private DatabaseConnection connection;
     private RequestHelper requestHelper;
 
@@ -98,15 +99,18 @@ public class ZStorageManager implements StorageManager {
         }
 
         long currentTime = System.currentTimeMillis();
-        long lastTime = lastUpdateTime.getOrDefault(uniqueId, 0L);
+
+        Map<String, Long> jobLastUpdateTimes = lastUpdateTime.computeIfAbsent(uniqueId, k -> new ConcurrentHashMap<>());
+        long lastTime = jobLastUpdateTimes.getOrDefault(playerJob.getJobId(), 0L);
 
         if (currentTime - lastTime < 5000) {
-            pendingUpdates.put(uniqueId, playerJob);
+            Map<String, PlayerJob> jobs = pendingUpdates.computeIfAbsent(uniqueId, k -> new ConcurrentHashMap<>());
+            jobs.put(playerJob.getJobId(), playerJob);
             return;
         }
 
         executeUpsert(uniqueId, playerJob);
-        lastUpdateTime.put(uniqueId, currentTime);
+        jobLastUpdateTimes.put(playerJob.getJobId(), currentTime);
     }
 
     private void executeUpsert(UUID uniqueId, PlayerJob playerJob) {
@@ -125,29 +129,40 @@ public class ZStorageManager implements StorageManager {
         this.plugin.getScheduler().runTaskTimerAsynchronously(100L, 100L, () -> {
             long currentTime = System.currentTimeMillis();
 
-            Iterator<Map.Entry<UUID, PlayerJob>> iterator = pendingUpdates.entrySet().iterator();
+            this.pendingUpdates.forEach((uniqueId, jobsMap) -> {
 
-            while (iterator.hasNext()) {
-                Map.Entry<UUID, PlayerJob> entry = iterator.next();
-                UUID uniqueId = entry.getKey();
-                PlayerJob playerJob = entry.getValue();
+                Map<String, Long> jobLastUpdateTimes = lastUpdateTime.getOrDefault(uniqueId, new ConcurrentHashMap<>());
+                Iterator<Map.Entry<String, PlayerJob>> iterator = jobsMap.entrySet().iterator();
 
-                long lastTime = lastUpdateTime.getOrDefault(uniqueId, 0L);
+                while (iterator.hasNext()) {
+                    Map.Entry<String, PlayerJob> entry = iterator.next();
+                    String jobId = entry.getKey();
+                    PlayerJob playerJob = entry.getValue();
 
-                if (currentTime - lastTime >= 5000) {
-                    executeUpsert(uniqueId, playerJob);
-                    lastUpdateTime.put(uniqueId, currentTime);
-                    iterator.remove();
+                    long lastTime = jobLastUpdateTimes.getOrDefault(jobId, 0L);
+
+                    if (currentTime - lastTime >= 5000) {
+                        executeUpsert(uniqueId, playerJob);
+                        jobLastUpdateTimes.put(jobId, currentTime);
+                        iterator.remove();
+                    }
                 }
-            }
+            });
         });
     }
 
     @Override
     public void deleteJob(UUID uniqueId, String jobId) {
-        this.plugin.getScheduler().runTaskAsynchronously(() -> this.requestHelper.delete("%prefix%jobs", table -> {
-            table.where("unique_id", uniqueId).primary();
-            table.where("job_id", jobId);
-        }));
+        this.plugin.getScheduler().runTaskAsynchronously(() -> {
+            this.requestHelper.delete("%prefix%jobs", table -> {
+                table.where("unique_id", uniqueId).primary();
+                table.where("job_id", jobId);
+            });
+
+            Map<String, PlayerJob> jobs = this.pendingUpdates.get(uniqueId);
+            if (jobs != null) {
+                jobs.remove(jobId);
+            }
+        });
     }
 }

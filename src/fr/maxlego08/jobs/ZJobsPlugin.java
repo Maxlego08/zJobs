@@ -3,6 +3,7 @@ package fr.maxlego08.jobs;
 import fr.maxlego08.jobs.api.JobManager;
 import fr.maxlego08.jobs.api.storage.StorageManager;
 import fr.maxlego08.jobs.command.commands.CommandJobs;
+import fr.maxlego08.jobs.component.PaperComponent;
 import fr.maxlego08.jobs.placeholder.LocalPlaceholder;
 import fr.maxlego08.jobs.save.Config;
 import fr.maxlego08.jobs.save.MessageLoader;
@@ -24,6 +25,7 @@ public class ZJobsPlugin extends ZPlugin {
     private final StorageManager storageManager = new ZStorageManager(this);
     private InventoryManager inventoryManager;
     private ButtonManager buttonManager;
+    private final PaperComponent paperComponent = new PaperComponent();
 
     @Override
     public void onEnable() {
@@ -87,5 +89,9 @@ public class ZJobsPlugin extends ZPlugin {
 
     public ZScheduler getScheduler() {
         return this.inventoryManager.getScheduler();
+    }
+
+    public PaperComponent getPaperComponent() {
+        return paperComponent;
     }
 }

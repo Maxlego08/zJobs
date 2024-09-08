@@ -37,3 +37,9 @@ database-configuration:
 
 default-jobs:
   - "miner"
+
+decimal-format: "#.##"
+
+progression-bar:
+  color: WHITE
+  overlay: PROGRESS

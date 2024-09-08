@@ -81,7 +81,7 @@ public class ZJobManager extends ZUtils implements JobManager {
 
     @Override
     public void playerQuit(Player player) {
-        // ToDo
+        this.players.remove(player.getUniqueId());
     }
 
     @Override

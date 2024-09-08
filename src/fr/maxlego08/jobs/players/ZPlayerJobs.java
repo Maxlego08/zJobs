@@ -8,6 +8,7 @@ import fr.maxlego08.jobs.api.JobManager;
 import fr.maxlego08.jobs.api.players.PlayerJob;
 import fr.maxlego08.jobs.api.players.PlayerJobs;
 import fr.maxlego08.jobs.api.storage.StorageManager;
+import fr.maxlego08.jobs.bossbar.JobBossBar;
 import fr.maxlego08.jobs.zcore.utils.ElapsedTime;
 import org.bukkit.entity.Player;
 
@@ -20,6 +21,7 @@ public class ZPlayerJobs implements PlayerJobs {
     private final ZJobsPlugin plugin;
     private final UUID uniqueId;
     private final List<PlayerJob> jobs;
+    private JobBossBar jobBossBar;
 
 
     public ZPlayerJobs(ZJobsPlugin plugin, UUID uniqueId, List<PlayerJob> jobs) {
@@ -79,10 +81,7 @@ public class ZPlayerJobs implements PlayerJobs {
 
     @Override
     public String toString() {
-        return "JobPlayersImpl{" +
-                "uniqueId=" + uniqueId +
-                ", jobs=" + jobs +
-                '}';
+        return "JobPlayersImpl{" + "uniqueId=" + uniqueId + ", jobs=" + jobs + '}';
     }
 
     @Override
@@ -112,8 +111,10 @@ public class ZPlayerJobs implements PlayerJobs {
     @Override
     public void process(Player player, PlayerJob playerJob, Job job, JobAction<?> action, double experience, boolean initialCall) {
 
+
         // Mise à jour des niveaux
         playerJob.process(experience);
+        this.updateBossBar(player, playerJob, job);
 
         double maxExperience = job.getExperience(playerJob.getLevel(), playerJob.getPrestige());
 
@@ -134,6 +135,9 @@ public class ZPlayerJobs implements PlayerJobs {
                 // ToDo
             }
 
+            if (this.jobBossBar != null) this.jobBossBar.updateMaxExperience(job.getExperience(playerJob.getLevel(), playerJob.getPrestige()));
+            updateBossBar(player, playerJob, job);
+
             if (remainingExperience > 0) {
                 this.process(player, playerJob, job, action, remainingExperience, false);
             }
@@ -142,6 +146,18 @@ public class ZPlayerJobs implements PlayerJobs {
         if (initialCall) {
             StorageManager storageManager = plugin.getStorageManager();
             storageManager.upsert(uniqueId, playerJob, false);
+        }
+    }
+
+    private void updateBossBar(Player player, PlayerJob playerJob, Job job) {
+
+        if (this.jobBossBar == null || this.jobBossBar.isExpired()) {
+
+            this.jobBossBar = new JobBossBar(plugin, player, playerJob.getExperience(), job.getExperience(playerJob.getLevel(), playerJob.getPrestige()), playerJob.getLevel(), playerJob.getPrestige(), job.getName());
+            this.jobBossBar.resetTimer();
+        } else {
+
+            this.jobBossBar.updateExperience(playerJob.getExperience(), playerJob.getLevel(), playerJob.getPrestige());
         }
     }
 }

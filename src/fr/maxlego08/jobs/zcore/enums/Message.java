@@ -37,6 +37,8 @@ public enum Message {
 
     DESCRIPTION_RELOAD("Reload configuration files"),
 
+    PROGRESSION_BOSSBAR("#2fe082%job-name% #434343- #f7f725%job-experience%&8/#f78e25%job-max-experience% #434343- #2fe082P%job-prestige% lvl %job-level%"),
+
     ;
 
     private List<String> messages;
