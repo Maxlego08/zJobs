@@ -36,7 +36,12 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.potion.PotionEffectType;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -52,6 +57,7 @@ import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -420,7 +426,7 @@ public abstract class ZUtils extends MessageUtils {
      * @param objects   additional objects to be used in creating the inventory.
      */
     protected void createInventory(ZJobsPlugin plugin, Player player, EnumInventory inventory, int page, Object... objects) {
-        plugin.getInventoryManager().createInventory(inventory, player, page, objects);
+        plugin.getZInventoryManager().createInventory(inventory, player, page, objects);
     }
 
     /**
@@ -433,7 +439,7 @@ public abstract class ZUtils extends MessageUtils {
      * @param objects   additional objects to be used in creating the inventory.
      */
     protected void createInventory(ZJobsPlugin plugin, Player player, int inventory, int page, Object... objects) {
-        plugin.getInventoryManager().createInventory(inventory, player, page, objects);
+        plugin.getZInventoryManager().createInventory(inventory, player, page, objects);
     }
 
     /**
@@ -1163,5 +1169,14 @@ public abstract class ZUtils extends MessageUtils {
         return false;
     }
 
+
+    protected void files(File folder, Consumer<File> consumer) {
+        try (Stream<Path> s = Files.walk(Paths.get(folder.getPath()))) {
+            s.skip(1).map(Path::toFile).filter(File::isFile).filter(e -> e.getName().endsWith(".yml"))
+                    .forEach(consumer);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
 
 }
