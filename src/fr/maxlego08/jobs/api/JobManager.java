@@ -38,5 +38,9 @@ public interface JobManager {
 
     void updatePlayerJobLevel(CommandSender sender, OfflinePlayer offlinePlayer, String jobName, int level, AdminAction action);
 
+    void updatePlayerJobPrestige(CommandSender sender, OfflinePlayer offlinePlayer, String jobName, int prestige, AdminAction action);
+
+    void updatePlayerJobExperience(CommandSender sender, OfflinePlayer offlinePlayer, String jobName, double experience, AdminAction action);
+
     void loadOfflinePlayer(UUID uuid, Consumer<PlayerJobs> consumer);
 }

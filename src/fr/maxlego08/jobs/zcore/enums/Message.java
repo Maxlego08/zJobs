@@ -79,6 +79,14 @@ public enum Message {
     ADMIN_LEVEL_SET("You just set the level of the job %name% to %level% for %player%&a."),
     ADMIN_LEVEL_REMOVE("You have just removed %level% level from the %player%’s job %name%&a."),
 
+    ADMIN_PRESTIGE_ADD("You just added %prestige% prestige to the %player%’s job %name%&a."),
+    ADMIN_PRESTIGE_SET("You just set the prestige of the job %name% to %prestige% for %player%&a."),
+    ADMIN_PRESTIGE_REMOVE("You have just removed %prestige% prestige from the %player%’s job %name%&a."),
+
+    ADMIN_EXPERIENCE_ADD("You just added %experience% experience to the %player%’s job %name%&a."),
+    ADMIN_EXPERIENCE_SET("You just set the experience of the job %name% to %experience% for %player%&a."),
+    ADMIN_EXPERIENCE_REMOVE("You have just removed %experience% experience from the %player%’s job %name%&a."),
+
     ;
 
     private List<String> messages;

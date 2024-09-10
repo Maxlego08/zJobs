@@ -63,6 +63,21 @@ public class ZPlayerJob implements PlayerJob {
     }
 
     @Override
+    public void removeExperience(double experience) {
+        this.experience = experience;
+    }
+
+    @Override
+    public void addPrestige(int prestige) {
+        this.prestige += prestige;
+    }
+
+    @Override
+    public void removePrestige(int prestige) {
+        this.prestige -= prestige;
+    }
+
+    @Override
     public int getPrestige() {
         return prestige;
     }

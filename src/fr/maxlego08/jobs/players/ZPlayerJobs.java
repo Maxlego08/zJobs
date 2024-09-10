@@ -2,9 +2,9 @@ package fr.maxlego08.jobs.players;
 
 import fr.maxlego08.jobs.ZJobsPlugin;
 import fr.maxlego08.jobs.api.Job;
-import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.JobManager;
 import fr.maxlego08.jobs.api.JobReward;
+import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.players.PlayerJob;
 import fr.maxlego08.jobs.api.players.PlayerJobs;
 import fr.maxlego08.jobs.api.storage.StorageManager;
@@ -115,7 +115,6 @@ public class ZPlayerJobs implements PlayerJobs {
     @Override
     public void process(Player player, PlayerJob playerJob, Job job, double experience, boolean initialCall) {
 
-
         // Mise à jour des niveaux
         playerJob.process(experience);
         this.updateBossBar(player, playerJob, job);
@@ -144,7 +143,7 @@ public class ZPlayerJobs implements PlayerJobs {
             if (this.jobBossBar != null) {
                 this.jobBossBar.updateMaxExperience(job.getExperience(playerJob.getLevel(), playerJob.getPrestige()));
             }
-            updateBossBar(player, playerJob, job);
+            this.updateBossBar(player, playerJob, job);
 
             if (remainingExperience > 0) {
                 this.process(player, playerJob, job, remainingExperience, false);
@@ -158,8 +157,8 @@ public class ZPlayerJobs implements PlayerJobs {
     }
 
 
-
     private void processReward(Player player, Job job, int newLevel, int oldLevel, int newPrestige, int oldPrestige) {
+        if (player == null) return;
 
         Placeholders placeholders = new Placeholders();
         placeholders.register("level", String.valueOf(newLevel));
@@ -184,6 +183,7 @@ public class ZPlayerJobs implements PlayerJobs {
     }
 
     private void updateBossBar(Player player, PlayerJob playerJob, Job job) {
+        if (player == null) return;
 
         if (this.jobBossBar == null || this.jobBossBar.isExpired()) {
 

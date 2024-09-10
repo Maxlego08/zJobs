@@ -25,4 +25,11 @@ public interface PlayerJob {
     void addLevel(int level);
 
     void removeLevel(int level);
+
+    void removeExperience(double experience);
+
+    void addPrestige(int prestige);
+
+    void removePrestige(int prestige);
+
 }

@@ -241,4 +241,82 @@ public class ZJobManager extends ZUtils implements JobManager {
             this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJob, true);
         });
     }
+
+    @Override
+    public void updatePlayerJobPrestige(CommandSender sender, OfflinePlayer offlinePlayer, String name, int prestige, AdminAction action) {
+        Optional<Job> optional = this.getJob(name);
+        if (optional.isEmpty()) {
+            message(sender, Message.DOESNT_EXIST, "%name%", name);
+            return;
+        }
+
+        Job job = optional.get();
+
+        loadOfflinePlayer(offlinePlayer.getUniqueId(), playerJobs -> {
+
+            var optionalPlayerJob = playerJobs.get(job);
+            if (optionalPlayerJob.isEmpty()) {
+                message(sender, Message.ADMIN_PLAYER_JOB, "%name%", name, "%player%", offlinePlayer.getName());
+                return;
+            }
+
+            var playerJob = optionalPlayerJob.get();
+            Message message = switch (action) {
+                case ADD -> {
+                    playerJob.addPrestige(prestige);
+                    yield Message.ADMIN_PRESTIGE_ADD;
+                }
+                case REMOVE -> {
+                    playerJob.removePrestige(prestige);
+                    yield Message.ADMIN_PRESTIGE_REMOVE;
+                }
+                case SET -> {
+                    playerJob.setPrestige(prestige);
+                    yield Message.ADMIN_PRESTIGE_SET;
+                }
+            };
+            message(sender, message, "%name%", name, "%prestige%", prestige, "%player%", offlinePlayer.getName());
+
+            this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJob, true);
+        });
+    }
+
+    @Override
+    public void updatePlayerJobExperience(CommandSender sender, OfflinePlayer offlinePlayer, String name, double experience, AdminAction action) {
+        Optional<Job> optional = this.getJob(name);
+        if (optional.isEmpty()) {
+            message(sender, Message.DOESNT_EXIST, "%name%", name);
+            return;
+        }
+
+        Job job = optional.get();
+
+        loadOfflinePlayer(offlinePlayer.getUniqueId(), playerJobs -> {
+
+            var optionalPlayerJob = playerJobs.get(job);
+            if (optionalPlayerJob.isEmpty()) {
+                message(sender, Message.ADMIN_PLAYER_JOB, "%name%", name, "%player%", offlinePlayer.getName());
+                return;
+            }
+
+            var playerJob = optionalPlayerJob.get();
+            Message message = switch (action) {
+                case ADD -> {
+                    playerJobs.process(offlinePlayer.getPlayer(), playerJob, job, experience, false);
+                    yield Message.ADMIN_EXPERIENCE_ADD;
+                }
+                case REMOVE -> {
+                    playerJob.removeExperience(experience);
+                    yield Message.ADMIN_EXPERIENCE_REMOVE;
+                }
+                case SET -> {
+                    playerJob.setExperience(experience);
+                    yield Message.ADMIN_EXPERIENCE_SET;
+                }
+            };
+            message(sender, message, "%name%", name, "%experience%", experience, "%player%", offlinePlayer.getName());
+
+            this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJob, true);
+        });
+    }
 }

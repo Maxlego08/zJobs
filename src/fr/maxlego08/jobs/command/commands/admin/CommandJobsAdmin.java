@@ -2,7 +2,9 @@ package fr.maxlego08.jobs.command.commands.admin;
 
 import fr.maxlego08.jobs.ZJobsPlugin;
 import fr.maxlego08.jobs.command.VCommand;
+import fr.maxlego08.jobs.command.commands.admin.experience.CommandJobsAdminExperience;
 import fr.maxlego08.jobs.command.commands.admin.level.CommandJobsAdminLevel;
+import fr.maxlego08.jobs.command.commands.admin.prestige.CommandJobsAdminPrestige;
 import fr.maxlego08.jobs.zcore.enums.Message;
 import fr.maxlego08.jobs.zcore.enums.Permission;
 import fr.maxlego08.jobs.zcore.utils.commands.CommandType;
@@ -15,6 +17,8 @@ public class CommandJobsAdmin extends VCommand {
         this.addSubCommand("admin", "a");
         this.setDescription(Message.DESCRIPTION_RELOAD);
         this.addSubCommand(new CommandJobsAdminLevel(plugin));
+        this.addSubCommand(new CommandJobsAdminExperience(plugin));
+        this.addSubCommand(new CommandJobsAdminPrestige(plugin));
     }
 
     @Override
