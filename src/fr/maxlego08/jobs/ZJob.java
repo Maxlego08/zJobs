@@ -23,8 +23,10 @@ public class ZJob implements Job {
     private final List<JobAction<?>> jobActions;
     private final List<JobReward> jobRewards;
     private final double[][] matrix;
+    private final boolean canJoin;
+    private final boolean canLeave;
 
-    public ZJob(String name, String fileName, double baseExperience, int maxLevels, int maxPrestiges, String formula, List<JobAction<?>> jobActions, List<JobReward> jobRewards) {
+    public ZJob(String name, String fileName, double baseExperience, int maxLevels, int maxPrestiges, String formula, List<JobAction<?>> jobActions, List<JobReward> jobRewards, boolean canJoin, boolean canLeave) {
         this.name = name;
         this.fileName = fileName;
         this.baseExperience = baseExperience;
@@ -33,6 +35,8 @@ public class ZJob implements Job {
         this.formula = formula;
         this.jobActions = jobActions;
         this.jobRewards = jobRewards;
+        this.canJoin = canJoin;
+        this.canLeave = canLeave;
         this.matrix = new double[this.maxLevels][this.maxPrestiges + 1];
 
         for (int prestige = 0; prestige <= this.maxPrestiges; prestige++) {
@@ -121,5 +125,15 @@ public class ZJob implements Job {
     @Override
     public Optional<JobAction<?>> getAction(JobActionType action, Object target) {
         return this.jobActions.stream().filter(jobAction -> jobAction.getType() == action && jobAction.isAction(target)).findFirst();
+    }
+
+    @Override
+    public boolean canLeave() {
+        return this.canLeave;
+    }
+
+    @Override
+    public boolean canJoin() {
+        return canJoin;
     }
 }

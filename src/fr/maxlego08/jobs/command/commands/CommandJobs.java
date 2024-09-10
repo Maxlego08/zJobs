@@ -11,6 +11,8 @@ public class CommandJobs extends VCommand {
 		super(plugin);
 		this.setPermission(Permission.ZJOBS_PERMISSION);
 		this.addSubCommand(new CommandJobsReload(plugin));
+		this.addSubCommand(new CommandJobsJoin(plugin));
+		this.addSubCommand(new CommandJobsLeave(plugin));
 	}
 
 	@Override

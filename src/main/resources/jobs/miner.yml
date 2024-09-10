@@ -8,6 +8,12 @@ max-prestiges: 10
 
 formula: "baseExperience * (1 + 0.05 * level + 0.005 * level^2) * (1 + 0.3 * (prestige / maxPrestiges))"
 
+# Check if the player can leave the job
+can-leave: false
+
+# Checks if the player can join the job. If false, then the job must be added to the default jobs list in config.yml
+can-join: false
+
 actions:
   - type: BLOCK_BREAK
     material: STONE

@@ -28,4 +28,8 @@ public interface Job {
     double getExperience(int level, int prestige);
 
     Optional<JobAction<?>> getAction(JobActionType action, Object target);
+
+    boolean canLeave();
+
+    boolean canJoin();
 }

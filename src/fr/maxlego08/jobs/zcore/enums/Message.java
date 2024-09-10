@@ -10,10 +10,10 @@ import java.util.Map;
 
 public enum Message {
 
-    PREFIX("§8(#42f59bJobs§8) "),
+    PREFIX("&8(#42f59bJobs&8) "),
 
-    INVENTORY_CLONE_NULL("§cThe inventory clone is null!"),
-    INVENTORY_OPEN_ERROR("§cAn error occurred with the opening of the inventory §6%id%§c."),
+    INVENTORY_CLONE_NULL("&cThe inventory clone is null!"),
+    INVENTORY_OPEN_ERROR("&cAn error occurred with the opening of the inventory &6%id%&c."),
     TIME_DAY("%02d %day% %02d %hour% %02d %minute% %02d %second%"),
     TIME_HOUR("%02d %hour% %02d minute(s) %02d %second%"),
     TIME_MINUTE("%02d %minute% %02d %second%"),
@@ -27,17 +27,29 @@ public enum Message {
 
     FORMAT_DAY("d"), FORMAT_DAYS("days"),
 
-    COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §a%syntax%"),
-    COMMAND_NO_PERMISSION("§cYou do not have permission to run this command."),
-    COMMAND_NO_CONSOLE("§cOnly one player can execute this command."),
-    COMMAND_NO_ARG("§cImpossible to find the command with its arguments."),
-    COMMAND_SYNTAXE_HELP("§f%syntax% §7» §7%description%"),
+    COMMAND_SYNTAXE_ERROR("&cYou must execute the command like this&7: &a%syntax%"),
+    COMMAND_NO_PERMISSION("&cYou do not have permission to run this command."),
+    COMMAND_NO_CONSOLE("&cOnly one player can execute this command."),
+    COMMAND_NO_ARG("&cImpossible to find the command with its arguments."),
+    COMMAND_SYNTAXE_HELP("&f%syntax% &7» &7%description%"),
 
-    RELOAD("§aYou have just reloaded the configuration files."),
+    RELOAD("&aYou have just reloaded the configuration files."),
 
     DESCRIPTION_RELOAD("Reload configuration files"),
+    DESCRIPTION_JOIN("Join a job"),
+    DESCRIPTION_LEAVE("Leave a job"),
 
     PROGRESSION_BOSSBAR("#2fe082%job-name% #434343- #f7f725%job-experience%&8/#f78e25%job-max-experience% #434343- #2fe082P%job-prestige% lvl %job-level%"),
+
+    DOESNT_EXIST("&cThe jobs &f%name% &c does not exist."),
+    JOIN_ERROR_CANT("&cYou can’t join this job."),
+    JOIN_ERROR_ALREADY("&cYou already have the jobs &f%name%&c."),
+    JOIN_ERROR_LIMIT("&cYou have reached the job limit &8(&7%max%&8)&c, you cannot join a new job."),
+    JOIN_SUCCESS("&aYou have just joined the job &2%name%&a."),
+
+    LEAVE_ERROR_CANT("&cYou can’t leave this job."),
+    LEAVE_ERROR("&cYou do not have the jobs &f%name%&c."),
+    LEAVE_SUCCESS("&aYou have just quit the job &2%name%&a."),
 
     ;
 

@@ -4,13 +4,13 @@ import fr.maxlego08.jobs.zcore.enums.Message;
 import fr.maxlego08.jobs.zcore.enums.MessageType;
 import fr.maxlego08.jobs.zcore.utils.nms.NmsVersion;
 import fr.maxlego08.jobs.zcore.utils.players.ActionBar;
+import fr.maxlego08.menu.MenuPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,7 +66,8 @@ public abstract class MessageUtils extends LocationUtils {
      * @param message the message to send.
      */
     private void message(CommandSender sender, String message) {
-        sender.sendMessage(color(message));
+        MenuPlugin.getInstance().getInventoryManager().getMeta().sendMessage(sender, message);
+        // sender.sendMessage(color(message));
     }
 
     /**
@@ -101,34 +102,29 @@ public abstract class MessageUtils extends LocationUtils {
         } else {
             Player player = (Player) sender;
             switch (message.getType()) {
-                case CENTER:
+                case CENTER -> {
                     if (message.getMessages().size() > 0) {
                         message.getMessages().forEach(msg -> sender.sendMessage(this.getCenteredMessage(this.papi(getMessage(msg, args), player))));
                     } else {
                         sender.sendMessage(this.getCenteredMessage(this.papi(getMessage(message, args), player)));
                     }
-                    break;
-                case ACTION:
-                    this.actionMessage(player, message, args);
-                    break;
-                case TCHAT_AND_ACTION:
+                }
+                case ACTION -> this.actionMessage(player, message, args);
+                case TCHAT_AND_ACTION -> {
                     this.actionMessage(player, message, args);
                     sendTchatMessage(player, message, args);
-                    break;
-                case TCHAT:
-                case WITHOUT_PREFIX:
-                    sendTchatMessage(player, message, args);
-                    break;
-                case TITLE:
+                }
+                case TCHAT, WITHOUT_PREFIX -> sendTchatMessage(player, message, args);
+                case TITLE -> {
                     String title = message.getTitle();
                     String subTitle = message.getSubTitle();
                     int fadeInTime = message.getStart();
                     int showTime = message.getTime();
                     int fadeOutTime = message.getEnd();
                     this.title(player, this.papi(this.getMessage(title, args), player), this.papi(this.getMessage(subTitle, args), player), fadeInTime, showTime, fadeOutTime);
-                    break;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
         }
     }
@@ -154,7 +150,8 @@ public abstract class MessageUtils extends LocationUtils {
      * @param args    the arguments for the message.
      */
     protected void actionMessage(Player player, Message message, Object... args) {
-        ActionBar.sendActionBar(player, color(this.papi(getMessage(message, args), player)));
+        MenuPlugin.getInstance().getInventoryManager().getMeta().sendAction(player, this.papi(getMessage(message, args), player));
+        // ActionBar.sendActionBar(player, color(this.papi(getMessage(message, args), player)));
     }
 
     /**
@@ -215,7 +212,8 @@ public abstract class MessageUtils extends LocationUtils {
      * @param fadeOutTime the fade-out time in ticks.
      */
     protected void title(Player player, String title, String subtitle, int fadeInTime, int showTime, int fadeOutTime) {
-        if (NmsVersion.nmsVersion.isNewMaterial()) {
+        MenuPlugin.getInstance().getInventoryManager().getMeta().sendTitle(player, title, subtitle, fadeInTime, showTime, fadeOutTime);
+        /*if (NmsVersion.nmsVersion.isNewMaterial()) {
             player.sendTitle(title, subtitle, fadeInTime, showTime, fadeOutTime);
             return;
         }
@@ -233,7 +231,7 @@ public abstract class MessageUtils extends LocationUtils {
             sendPacket(player, timingPacket);
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     /**

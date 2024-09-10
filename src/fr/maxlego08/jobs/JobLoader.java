@@ -35,6 +35,8 @@ public class JobLoader implements Loader<Job> {
         double baseExperience = configuration.getDouble("base-experience", 100);
         int maxLevels = configuration.getInt("max-levels", 100);
         int maxPrestiges = configuration.getInt("max-prestiges", 100);
+        boolean canJoin = configuration.getBoolean("can-join", true);
+        boolean canLeave = configuration.getBoolean("can-leave", true);
         String name = configuration.getString("name");
         String formula = configuration.getString("formula", "baseExperience * (1 + 0.05 * level + 0.005 * level^2) * (1 + 0.3 * (prestige / maxPrestiges))");
         List<JobAction<?>> jobActions = loadActions(configuration);
@@ -48,7 +50,7 @@ public class JobLoader implements Loader<Job> {
             jobRewards.add(new ZJobReward(level, prestige, actions));
         });
 
-        return new ZJob(name, file.getName().replace(".yml", ""), baseExperience, maxLevels, maxPrestiges, formula, jobActions, jobRewards);
+        return new ZJob(name, file.getName().replace(".yml", ""), baseExperience, maxLevels, maxPrestiges, formula, jobActions, jobRewards, canJoin, canLeave);
     }
 
     private List<JobAction<?>> loadActions(YamlConfiguration configuration) {

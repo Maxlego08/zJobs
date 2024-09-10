@@ -43,3 +43,11 @@ decimal-format: "#.##"
 progression-bar:
   color: WHITE
   overlay: PROGRESS
+
+jobs-limit-permissions:
+  - permission: "zjobs.limit.player"
+    limit: 1
+  - permission: "zjobs.limit.vip"
+    limit: 2
+  - permission: "zjobs.limit.admin"
+    limit: 3
