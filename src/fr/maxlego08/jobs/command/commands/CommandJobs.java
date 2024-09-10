@@ -9,10 +9,11 @@ public class CommandJobs extends VCommand {
 
 	public CommandJobs(ZJobsPlugin plugin) {
 		super(plugin);
-		this.setPermission(Permission.ZJOBS_PERMISSION);
+		this.setPermission(Permission.ZJOBS_USE);
 		this.addSubCommand(new CommandJobsReload(plugin));
 		this.addSubCommand(new CommandJobsJoin(plugin));
 		this.addSubCommand(new CommandJobsLeave(plugin));
+		this.addSubCommand(new CommandJobsLeaveConfirm(plugin));
 	}
 
 	@Override

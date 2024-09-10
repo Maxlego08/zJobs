@@ -21,4 +21,8 @@ public interface PlayerJob {
     void nextLevel();
 
     void nextPrestige();
+
+    void addLevel(int level);
+
+    void removeLevel(int level);
 }

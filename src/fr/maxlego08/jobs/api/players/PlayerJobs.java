@@ -1,8 +1,7 @@
 package fr.maxlego08.jobs.api.players;
 
 import fr.maxlego08.jobs.api.Job;
-import fr.maxlego08.jobs.api.JobAction;
-import fr.maxlego08.jobs.api.JobActionType;
+import fr.maxlego08.jobs.api.enums.JobActionType;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -29,5 +28,5 @@ public interface PlayerJobs {
 
     void action(Player player, Object target, JobActionType action);
 
-    void process(Player player, PlayerJob playerJob, Job job, JobAction<?> action, double experience, boolean initialCall);
+    void process(Player player, PlayerJob playerJob, Job job, double experience, boolean initialCall);
 }

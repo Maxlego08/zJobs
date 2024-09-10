@@ -53,6 +53,16 @@ public class ZPlayerJob implements PlayerJob {
     }
 
     @Override
+    public void addLevel(int level) {
+        this.level += level;
+    }
+
+    @Override
+    public void removeLevel(int level) {
+        this.level -= level;
+    }
+
+    @Override
     public int getPrestige() {
         return prestige;
     }

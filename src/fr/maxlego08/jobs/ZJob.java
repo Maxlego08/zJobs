@@ -2,7 +2,7 @@ package fr.maxlego08.jobs;
 
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobAction;
-import fr.maxlego08.jobs.api.JobActionType;
+import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.JobReward;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;

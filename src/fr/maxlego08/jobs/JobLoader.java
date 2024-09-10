@@ -4,7 +4,7 @@ import fr.maxlego08.jobs.actions.BlockAction;
 import fr.maxlego08.jobs.actions.BlockTagAction;
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobAction;
-import fr.maxlego08.jobs.api.JobActionType;
+import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.JobReward;
 import fr.maxlego08.jobs.zcore.utils.TagRegistry;
 import fr.maxlego08.jobs.zcore.utils.loader.Loader;

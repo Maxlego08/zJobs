@@ -1,6 +1,6 @@
 package fr.maxlego08.jobs;
 
-import fr.maxlego08.jobs.api.JobActionType;
+import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.JobManager;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

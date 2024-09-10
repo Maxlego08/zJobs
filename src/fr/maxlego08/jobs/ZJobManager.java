@@ -1,8 +1,9 @@
 package fr.maxlego08.jobs;
 
 import fr.maxlego08.jobs.api.Job;
-import fr.maxlego08.jobs.api.JobActionType;
 import fr.maxlego08.jobs.api.JobManager;
+import fr.maxlego08.jobs.api.enums.AdminAction;
+import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.players.PlayerJob;
 import fr.maxlego08.jobs.api.players.PlayerJobs;
 import fr.maxlego08.jobs.api.storage.StorageManager;
@@ -13,6 +14,7 @@ import fr.maxlego08.jobs.zcore.utils.ElapsedTime;
 import fr.maxlego08.jobs.zcore.utils.ZUtils;
 import fr.maxlego08.jobs.zcore.utils.loader.Loader;
 import fr.maxlego08.menu.api.scheduler.ZScheduler;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class ZJobManager extends ZUtils implements JobManager {
 
@@ -53,6 +56,15 @@ public class ZJobManager extends ZUtils implements JobManager {
                 this.plugin.getLogger().info("Job " + job.getName() + " loaded !");
             }
         });
+    }
+
+    @Override
+    public void loadOfflinePlayer(UUID uuid, Consumer<PlayerJobs> consumer) {
+        if (this.players.containsKey(uuid)) {
+            consumer.accept(this.players.get(uuid));
+        } else {
+            this.plugin.getScheduler().runTaskAsynchronously(() -> consumer.accept(this.plugin.getStorageManager().loadPlayerJobs(uuid)));
+        }
     }
 
     @Override
@@ -154,7 +166,7 @@ public class ZJobManager extends ZUtils implements JobManager {
     }
 
     @Override
-    public void leave(Player player, String name) {
+    public void leave(Player player, String name, boolean confirm) {
 
         Optional<Job> optional = this.getJob(name);
         if (optional.isEmpty()) {
@@ -182,7 +194,51 @@ public class ZJobManager extends ZUtils implements JobManager {
             return;
         }
 
-        message(player, Message.LEAVE_SUCCESS, "%name%", name);
-        playerJobs.leave(job);
+        if (confirm) {
+            message(player, Message.LEAVE_SUCCESS, "%name%", name);
+            playerJobs.leave(job);
+        } else {
+            message(player, Message.LEAVE_SUCCESS_CONFIRM, "%name%", name);
+        }
+    }
+
+    @Override
+    public void updatePlayerJobLevel(CommandSender sender, OfflinePlayer offlinePlayer, String name, int level, AdminAction action) {
+
+        Optional<Job> optional = this.getJob(name);
+        if (optional.isEmpty()) {
+            message(sender, Message.DOESNT_EXIST, "%name%", name);
+            return;
+        }
+
+        Job job = optional.get();
+
+        loadOfflinePlayer(offlinePlayer.getUniqueId(), playerJobs -> {
+
+            var optionalPlayerJob = playerJobs.get(job);
+            if (optionalPlayerJob.isEmpty()) {
+                message(sender, Message.ADMIN_PLAYER_JOB, "%name%", name, "%player%", offlinePlayer.getName());
+                return;
+            }
+
+            var playerJob = optionalPlayerJob.get();
+            Message message = switch (action) {
+                case ADD -> {
+                    playerJob.addLevel(level);
+                    yield Message.ADMIN_LEVEL_ADD;
+                }
+                case REMOVE -> {
+                    playerJob.removeLevel(level);
+                    yield Message.ADMIN_LEVEL_REMOVE;
+                }
+                case SET -> {
+                    playerJob.setLevel(level);
+                    yield Message.ADMIN_LEVEL_SET;
+                }
+            };
+            message(sender, message, "%name%", name, "%level%", level, "%player%", offlinePlayer.getName());
+
+            this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJob, true);
+        });
     }
 }

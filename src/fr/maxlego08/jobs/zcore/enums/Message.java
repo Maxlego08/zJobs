@@ -38,6 +38,21 @@ public enum Message {
     DESCRIPTION_RELOAD("Reload configuration files"),
     DESCRIPTION_JOIN("Join a job"),
     DESCRIPTION_LEAVE("Leave a job"),
+    DESCRIPTION_LEAVE_CONFIRM("Confirm that you are leaving a job"),
+
+    DESCRIPTION_ADMIN("Show admin commands"),
+    DESCRIPTION_ADMIN_LEVEL("Show admin level commands"),
+    DESCRIPTION_ADMIN_LEVEL_ADD("Add level to a player's job"),
+    DESCRIPTION_ADMIN_LEVEL_SET("Define level to a player's job"),
+    DESCRIPTION_ADMIN_LEVEL_REMOVE("Remove level to a player's job"),
+    DESCRIPTION_ADMIN_EXPERIENCE("Show admin experience commands"),
+    DESCRIPTION_ADMIN_EXPERIENCE_ADD("Add experience to a player's job"),
+    DESCRIPTION_ADMIN_EXPERIENCE_SET("Define experience to a player's job"),
+    DESCRIPTION_ADMIN_EXPERIENCE_REMOVE("Remove experience to a player's job"),
+    DESCRIPTION_ADMIN_PRESTIGE("Show admin prestige commands"),
+    DESCRIPTION_ADMIN_PRESTIGE_ADD("Add prestige to a player's job"),
+    DESCRIPTION_ADMIN_PRESTIGE_SET("Define prestige to a player's job"),
+    DESCRIPTION_ADMIN_PRESTIGE_REMOVE("Remove prestige to a player's job"),
 
     PROGRESSION_BOSSBAR("#2fe082%job-name% #434343- #f7f725%job-experience%&8/#f78e25%job-max-experience% #434343- #2fe082P%job-prestige% lvl %job-level%"),
 
@@ -49,7 +64,20 @@ public enum Message {
 
     LEAVE_ERROR_CANT("&cYou can’t leave this job."),
     LEAVE_ERROR("&cYou do not have the jobs &f%name%&c."),
-    LEAVE_SUCCESS("&aYou have just quit the job &2%name%&a."),
+    LEAVE_SUCCESS(
+            "",
+            "<red>Do you really want to quit the job %name% ?",
+            "<green><hover:show_text:'Click to confirm!'><click:run_command:'/job leaveconfirm %name%'>ᴄᴏɴғɪʀᴍ</click></hover>",
+            ""
+    ),
+
+    LEAVE_SUCCESS_CONFIRM("&aYou have just quit the job &2%name%&a."),
+
+    ADMIN_PLAYER_JOB("&cThe &f%player% &cplayer does not have the &f%name% &cjob."),
+
+    ADMIN_LEVEL_ADD("You just added %level% level to the %player%’s job %name%&a."),
+    ADMIN_LEVEL_SET("You just set the level of the job %name% to %level% for %player%&a."),
+    ADMIN_LEVEL_REMOVE("You have just removed %level% level from the %player%’s job %name%&a."),
 
     ;
 

@@ -1,6 +1,6 @@
 package fr.maxlego08.jobs.actions;
 
-import fr.maxlego08.jobs.api.JobActionType;
+import fr.maxlego08.jobs.api.enums.JobActionType;
 import org.bukkit.Material;
 
 public class BlockAction extends ZJobAction<Material> {

@@ -1,5 +1,7 @@
 package fr.maxlego08.jobs.api;
 
+import fr.maxlego08.jobs.api.enums.JobActionType;
+
 import java.util.Collection;
 import java.util.Optional;
 

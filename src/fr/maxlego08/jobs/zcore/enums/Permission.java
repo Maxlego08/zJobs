@@ -2,10 +2,16 @@ package fr.maxlego08.jobs.zcore.enums;
 
 public enum Permission {
 
-    ZJOBS_PERMISSION,
+    ZJOBS_USE,
     ZJOBS_RELOAD,
     ZJOBS_JOIN,
     ZJOBS_LEAVE,
+    ZJOBS_LEAVE_CONFIRM,
+    ZJOBS_ADMIN_USE,
+    ZJOBS_ADMIN_LEVEL,
+    ZJOBS_ADMIN_LEVEL_ADD,
+    ZJOBS_ADMIN_LEVEL_SET,
+    ZJOBS_ADMIN_LEVEL_REMOVE,
 
     ;
 

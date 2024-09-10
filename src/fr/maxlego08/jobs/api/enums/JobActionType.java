@@ -1,4 +1,4 @@
-package fr.maxlego08.jobs.api;
+package fr.maxlego08.jobs.api.enums;
 
 public enum JobActionType {
 
