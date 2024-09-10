@@ -1,6 +1,7 @@
 package fr.maxlego08.jobs.api;
 
 import fr.maxlego08.jobs.api.enums.AdminAction;
+import fr.maxlego08.jobs.api.enums.AttributeType;
 import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.players.PlayerJobs;
 import org.bukkit.OfflinePlayer;
@@ -36,11 +37,7 @@ public interface JobManager {
 
     void leave(Player player, String name, boolean confirm);
 
-    void updatePlayerJobLevel(CommandSender sender, OfflinePlayer offlinePlayer, String jobName, int level, AdminAction action);
-
-    void updatePlayerJobPrestige(CommandSender sender, OfflinePlayer offlinePlayer, String jobName, int prestige, AdminAction action);
-
-    void updatePlayerJobExperience(CommandSender sender, OfflinePlayer offlinePlayer, String jobName, double experience, AdminAction action);
+    void updatePlayerJobAttribute(CommandSender sender, OfflinePlayer offlinePlayer, String name, double value, AdminAction action, AttributeType type);
 
     void loadOfflinePlayer(UUID uuid, Consumer<PlayerJobs> consumer);
 }

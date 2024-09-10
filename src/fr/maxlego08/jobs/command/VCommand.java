@@ -1,13 +1,15 @@
 package fr.maxlego08.jobs.command;
 
-import fr.maxlego08.jobs.zcore.enums.Message;
-import fr.maxlego08.jobs.zcore.enums.Permission;
-import fr.maxlego08.jobs.zcore.utils.commands.CommandType;
-import fr.maxlego08.jobs.zcore.utils.commands.Tab;
 import fr.maxlego08.jobs.ZJobsPlugin;
 import fr.maxlego08.jobs.save.Config;
+import fr.maxlego08.jobs.zcore.enums.Message;
+import fr.maxlego08.jobs.zcore.enums.Permission;
 import fr.maxlego08.jobs.zcore.utils.commands.Arguments;
 import fr.maxlego08.jobs.zcore.utils.commands.CollectionBiConsumer;
+import fr.maxlego08.jobs.zcore.utils.commands.CommandType;
+import fr.maxlego08.jobs.zcore.utils.commands.Tab;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -348,6 +350,10 @@ public abstract class VCommand extends Arguments {
         this.addRequireArg(message);
         int index = this.requireArgs.size();
         this.addCompletion(index - 1, runnable);
+    }
+
+    protected void addRequireArgOfflinePlayer() {
+        this.addRequireArg("player", (a, b) -> Arrays.stream(Bukkit.getOfflinePlayers()).map(OfflinePlayer::getName).toList());
     }
 
     /**

@@ -3,6 +3,7 @@ package fr.maxlego08.jobs;
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobManager;
 import fr.maxlego08.jobs.api.enums.AdminAction;
+import fr.maxlego08.jobs.api.enums.AttributeType;
 import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.players.PlayerJob;
 import fr.maxlego08.jobs.api.players.PlayerJobs;
@@ -203,8 +204,7 @@ public class ZJobManager extends ZUtils implements JobManager {
     }
 
     @Override
-    public void updatePlayerJobLevel(CommandSender sender, OfflinePlayer offlinePlayer, String name, int level, AdminAction action) {
-
+    public void updatePlayerJobAttribute(CommandSender sender, OfflinePlayer offlinePlayer, String name, double value, AdminAction action, AttributeType type) {
         Optional<Job> optional = this.getJob(name);
         if (optional.isEmpty()) {
             message(sender, Message.DOESNT_EXIST, "%name%", name);
@@ -222,101 +222,66 @@ public class ZJobManager extends ZUtils implements JobManager {
             }
 
             var playerJob = optionalPlayerJob.get();
-            Message message = switch (action) {
-                case ADD -> {
-                    playerJob.addLevel(level);
-                    yield Message.ADMIN_LEVEL_ADD;
-                }
-                case REMOVE -> {
-                    playerJob.removeLevel(level);
-                    yield Message.ADMIN_LEVEL_REMOVE;
-                }
-                case SET -> {
-                    playerJob.setLevel(level);
-                    yield Message.ADMIN_LEVEL_SET;
-                }
-            };
-            message(sender, message, "%name%", name, "%level%", level, "%player%", offlinePlayer.getName());
 
+            Message message = switch (type) {
+                case LEVEL -> processLevelAction(playerJob, action, (int) value);
+                case PRESTIGE -> processPrestigeAction(playerJob, action, (int) value);
+                case EXPERIENCE -> processExperienceAction(playerJobs, playerJob, job, offlinePlayer, value, action);
+            };
+
+            message(sender, message, "%name%", name, "%value%", value, "%player%", offlinePlayer.getName());
             this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJob, true);
         });
     }
 
-    @Override
-    public void updatePlayerJobPrestige(CommandSender sender, OfflinePlayer offlinePlayer, String name, int prestige, AdminAction action) {
-        Optional<Job> optional = this.getJob(name);
-        if (optional.isEmpty()) {
-            message(sender, Message.DOESNT_EXIST, "%name%", name);
-            return;
-        }
-
-        Job job = optional.get();
-
-        loadOfflinePlayer(offlinePlayer.getUniqueId(), playerJobs -> {
-
-            var optionalPlayerJob = playerJobs.get(job);
-            if (optionalPlayerJob.isEmpty()) {
-                message(sender, Message.ADMIN_PLAYER_JOB, "%name%", name, "%player%", offlinePlayer.getName());
-                return;
+    private Message processLevelAction(PlayerJob playerJob, AdminAction action, int value) {
+        return switch (action) {
+            case ADD -> {
+                playerJob.addLevel(value);
+                yield Message.ADMIN_LEVEL_ADD;
             }
-
-            var playerJob = optionalPlayerJob.get();
-            Message message = switch (action) {
-                case ADD -> {
-                    playerJob.addPrestige(prestige);
-                    yield Message.ADMIN_PRESTIGE_ADD;
-                }
-                case REMOVE -> {
-                    playerJob.removePrestige(prestige);
-                    yield Message.ADMIN_PRESTIGE_REMOVE;
-                }
-                case SET -> {
-                    playerJob.setPrestige(prestige);
-                    yield Message.ADMIN_PRESTIGE_SET;
-                }
-            };
-            message(sender, message, "%name%", name, "%prestige%", prestige, "%player%", offlinePlayer.getName());
-
-            this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJob, true);
-        });
+            case REMOVE -> {
+                playerJob.removeLevel(value);
+                yield Message.ADMIN_LEVEL_REMOVE;
+            }
+            case SET -> {
+                playerJob.setLevel(value);
+                yield Message.ADMIN_LEVEL_SET;
+            }
+        };
     }
 
-    @Override
-    public void updatePlayerJobExperience(CommandSender sender, OfflinePlayer offlinePlayer, String name, double experience, AdminAction action) {
-        Optional<Job> optional = this.getJob(name);
-        if (optional.isEmpty()) {
-            message(sender, Message.DOESNT_EXIST, "%name%", name);
-            return;
-        }
-
-        Job job = optional.get();
-
-        loadOfflinePlayer(offlinePlayer.getUniqueId(), playerJobs -> {
-
-            var optionalPlayerJob = playerJobs.get(job);
-            if (optionalPlayerJob.isEmpty()) {
-                message(sender, Message.ADMIN_PLAYER_JOB, "%name%", name, "%player%", offlinePlayer.getName());
-                return;
+    private Message processPrestigeAction(PlayerJob playerJob, AdminAction action, int value) {
+        return switch (action) {
+            case ADD -> {
+                playerJob.addPrestige(value);
+                yield Message.ADMIN_PRESTIGE_ADD;
             }
+            case REMOVE -> {
+                playerJob.removePrestige(value);
+                yield Message.ADMIN_PRESTIGE_REMOVE;
+            }
+            case SET -> {
+                playerJob.setPrestige(value);
+                yield Message.ADMIN_PRESTIGE_SET;
+            }
+        };
+    }
 
-            var playerJob = optionalPlayerJob.get();
-            Message message = switch (action) {
-                case ADD -> {
-                    playerJobs.process(offlinePlayer.getPlayer(), playerJob, job, experience, false);
-                    yield Message.ADMIN_EXPERIENCE_ADD;
-                }
-                case REMOVE -> {
-                    playerJob.removeExperience(experience);
-                    yield Message.ADMIN_EXPERIENCE_REMOVE;
-                }
-                case SET -> {
-                    playerJob.setExperience(experience);
-                    yield Message.ADMIN_EXPERIENCE_SET;
-                }
-            };
-            message(sender, message, "%name%", name, "%experience%", experience, "%player%", offlinePlayer.getName());
-
-            this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJob, true);
-        });
+    private Message processExperienceAction(PlayerJobs playerJobs, PlayerJob playerJob, Job job, OfflinePlayer offlinePlayer, double experience, AdminAction action) {
+        return switch (action) {
+            case ADD -> {
+                playerJobs.process(offlinePlayer.getPlayer(), playerJob, job, experience, false);
+                yield Message.ADMIN_EXPERIENCE_ADD;
+            }
+            case REMOVE -> {
+                playerJob.removeExperience(experience);
+                yield Message.ADMIN_EXPERIENCE_REMOVE;
+            }
+            case SET -> {
+                playerJob.setExperience(experience);
+                yield Message.ADMIN_EXPERIENCE_SET;
+            }
+        };
     }
 }
