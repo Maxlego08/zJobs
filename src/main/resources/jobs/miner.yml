@@ -15,13 +15,48 @@ can-leave: false
 can-join: false
 
 actions:
+
   - type: BLOCK_BREAK
-    material: STONE
-    experience: 0.5
+    tag: EMERALD_ORES
+    experience: 20
+    money: 2
+  - type: BLOCK_BREAK
+    tag: DIAMOND_ORES
+    experience: 15
     money: 0.2
   - type: BLOCK_BREAK
-    tag: LOGS
+    tag: LAPIS_ORES
+    experience: 4
+    money: 0.2
+  - type: BLOCK_BREAK
+    tag: REDSTONE_ORES
+    experience: 4
+    money: 0.2
+  - type: BLOCK_BREAK
+    tag: COAL_ORES
+    experience: 3
+    money: 0.2
+  - type: BLOCK_BREAK
+    tag: GOLD_ORES
+    experience: 8
+    money: 0.2
+  - type: BLOCK_BREAK
+    tag: IRON_ORES
+    experience: 3
+    money: 0.2
+  - type: BLOCK_BREAK
+    tag: COPPER_ORES
     experience: 2
+    money: 0.2
+
+  - type: BLOCK_BREAK
+    material: STONE
+    experience: 1
+    money: 0.2
+
+  - type: BLOCK_BREAK
+    tag: MINEABLE_PICKAXE
+    experience: 0.5
     money: 0.2
 
 rewards:
@@ -30,6 +65,9 @@ rewards:
     actions:
       - type: sound
         sound: ENTITY_PLAYER_LEVELUP
+      - type: message
+        messages:
+          - "&8(#42f59bJobs&8) &fYou are now #34ebb7ᴍɪɴᴇʀ &fP%prestige% &flvl #f7f725%level%"
   - level: 5
     prestige: 1
     actions:
