@@ -14,6 +14,7 @@ import fr.maxlego08.menu.MenuPlugin;
 import fr.maxlego08.menu.api.requirement.Action;
 import fr.maxlego08.menu.api.utils.Placeholders;
 import fr.maxlego08.menu.inventory.inventories.InventoryDefault;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class ZPlayerJobs implements PlayerJobs {
     private final UUID uniqueId;
     private final List<PlayerJob> jobs;
     private JobBossBar jobBossBar;
+    private double updateMoney;
 
 
     public ZPlayerJobs(ZJobsPlugin plugin, UUID uniqueId, List<PlayerJob> jobs) {
@@ -107,6 +109,10 @@ public class ZPlayerJobs implements PlayerJobs {
             var action = optionalAction.get();
 
             elapsedTime.endDisplay();
+
+            if (action.getMoney() > 0) {
+                this.updateMoney += action.getMoney();
+            }
 
             this.process(player, playerJob, job, action.getExperience(), true);
         }
@@ -191,7 +197,18 @@ public class ZPlayerJobs implements PlayerJobs {
             this.jobBossBar.resetTimer();
         } else {
 
-            this.jobBossBar.updateExperience(playerJob.getExperience(), playerJob.getLevel(), playerJob.getPrestige());
+            this.jobBossBar.resetTimer();
+            this.plugin.getScheduler().runTaskAsynchronously(() -> this.jobBossBar.updateExperience(playerJob.getExperience(), playerJob.getLevel(), playerJob.getPrestige()));
         }
+    }
+
+    @Override
+    public void updateJobEconomies() {
+        if (this.updateMoney <= 0) return;
+
+        var offlinePlayer = Bukkit.getOfflinePlayer(this.uniqueId);
+        this.plugin.getEconomyProvider().depositMoney(offlinePlayer, this.updateMoney);
+
+        this.updateMoney = 0;
     }
 }

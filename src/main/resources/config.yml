@@ -51,3 +51,5 @@ jobs-limit-permissions:
     limit: 2
   - permission: "zjobs.limit.admin"
     limit: 3
+
+default-economy: "VAULT"

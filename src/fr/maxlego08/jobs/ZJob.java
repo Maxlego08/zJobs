@@ -110,17 +110,25 @@ public class ZJob implements Job {
     @Override
     public double getExperience(int level, int prestige) {
         try {
-            int adjustedLevel = level - 1;
+            int adjustedLevel = Math.max(0, level - 1);
+            int maxLevel = this.matrix.length - 1;
 
-            if (adjustedLevel >= 0 && adjustedLevel < this.matrix.length && prestige >= 0 && prestige < this.matrix[adjustedLevel].length) {
-                return this.matrix[adjustedLevel][prestige];
-            } else {
-                return 99999999999999.0;
+            if (adjustedLevel > maxLevel) {
+                adjustedLevel = maxLevel;
             }
+
+            int maxPrestige = this.matrix[adjustedLevel].length - 1;
+
+            if (prestige > maxPrestige) {
+                prestige = maxPrestige;
+            }
+
+            return this.matrix[adjustedLevel][prestige];
         } catch (Exception ignored) {
-            return 99999999999999.0;
+            return 99999999999999.0; // Just in case
         }
     }
+
 
     @Override
     public Optional<JobAction<?>> getAction(JobActionType action, Object target) {

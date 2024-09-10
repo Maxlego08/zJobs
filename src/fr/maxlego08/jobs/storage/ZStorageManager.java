@@ -31,10 +31,8 @@ import java.util.stream.Collectors;
 public class ZStorageManager implements StorageManager {
 
     private final ZJobsPlugin plugin;
-    // Map qui contient une map pour chaque joueur (UUID), chaque map contient les PlayerJob avec jobId comme clé
     private final Map<UUID, Map<String, PlayerJob>> pendingUpdates = new ConcurrentHashMap<>();
     private final Map<UUID, Map<String, Long>> lastUpdateTime = new ConcurrentHashMap<>();
-    private DatabaseConnection connection;
     private RequestHelper requestHelper;
 
     public ZStorageManager(ZJobsPlugin plugin) {
@@ -56,14 +54,14 @@ public class ZStorageManager implements StorageManager {
         boolean debug = configuration.getBoolean("database-configuration.debug");
 
         DatabaseConfiguration databaseConfiguration = new DatabaseConfiguration(tablePrefix, user, password, port, host, database, debug, storageType == StorageType.SQLITE ? DatabaseType.SQLITE : DatabaseType.MYSQL);
-        this.connection = switch (storageType) {
+        DatabaseConnection connection = switch (storageType) {
             case MYSQL -> new MySqlConnection(databaseConfiguration);
             case SQLITE -> new SqliteConnection(databaseConfiguration, this.plugin.getDataFolder());
             case HIKARICP -> new HikariDatabaseConnection(databaseConfiguration);
         };
-        this.requestHelper = new RequestHelper(this.connection, JULogger.from(plugin.getLogger()));
+        this.requestHelper = new RequestHelper(connection, JULogger.from(plugin.getLogger()));
 
-        if (!this.connection.isValid()) {
+        if (!connection.isValid()) {
             plugin.getLogger().severe("Unable to connect to database!");
             Bukkit.getPluginManager().disablePlugin(plugin);
         } else {
@@ -79,7 +77,7 @@ public class ZStorageManager implements StorageManager {
 
         MigrationManager.registerMigration(new CreateJobPlayerMigration());
 
-        MigrationManager.execute(this.connection, JULogger.from(this.plugin.getLogger()));
+        MigrationManager.execute(connection, JULogger.from(this.plugin.getLogger()));
 
         startUpdateTask();
     }
@@ -127,6 +125,9 @@ public class ZStorageManager implements StorageManager {
 
     private void startUpdateTask() {
         this.plugin.getScheduler().runTaskTimerAsynchronously(100L, 100L, () -> {
+
+            this.plugin.getJobManager().updateJobEconomies();
+
             long currentTime = System.currentTimeMillis();
 
             this.pendingUpdates.forEach((uniqueId, jobsMap) -> {

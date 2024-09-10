@@ -58,7 +58,6 @@ public class JobBossBar extends ZUtils {
                 "%job-prestige%", prestige,
                 "%job-level%", level
         )));
-        resetTimer();
     }
 
     public void updateMaxExperience(double maxExperience) {

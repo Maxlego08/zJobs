@@ -29,4 +29,6 @@ public interface PlayerJobs {
     void action(Player player, Object target, JobActionType action);
 
     void process(Player player, PlayerJob playerJob, Job job, double experience, boolean initialCall);
+
+    void updateJobEconomies();
 }

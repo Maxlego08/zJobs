@@ -1,14 +1,18 @@
 package fr.maxlego08.jobs;
 
 import fr.maxlego08.jobs.api.JobManager;
+import fr.maxlego08.jobs.api.economy.EconomyProvider;
 import fr.maxlego08.jobs.api.storage.StorageManager;
 import fr.maxlego08.jobs.command.commands.CommandJobs;
 import fr.maxlego08.jobs.component.PaperComponent;
+import fr.maxlego08.jobs.economy.EmptyProvider;
+import fr.maxlego08.jobs.economy.VaultProvider;
 import fr.maxlego08.jobs.placeholder.LocalPlaceholder;
 import fr.maxlego08.jobs.save.Config;
 import fr.maxlego08.jobs.save.MessageLoader;
 import fr.maxlego08.jobs.storage.ZStorageManager;
 import fr.maxlego08.jobs.zcore.ZPlugin;
+import fr.maxlego08.jobs.zcore.utils.plugins.Plugins;
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
 import fr.maxlego08.menu.api.scheduler.ZScheduler;
@@ -23,9 +27,10 @@ public class ZJobsPlugin extends ZPlugin {
 
     private final JobManager jobManager = new ZJobManager(this);
     private final StorageManager storageManager = new ZStorageManager(this);
+    private final PaperComponent paperComponent = new PaperComponent();
     private InventoryManager inventoryManager;
     private ButtonManager buttonManager;
-    private final PaperComponent paperComponent = new PaperComponent();
+    private EconomyProvider economyProvider = new EmptyProvider();
 
     @Override
     public void onEnable() {
@@ -49,6 +54,10 @@ public class ZJobsPlugin extends ZPlugin {
         this.loadFiles();
 
         this.storageManager.load();
+
+        if (isEnable(Plugins.VAULT)) {
+            this.economyProvider = new VaultProvider(this);
+        }
 
         this.postEnable();
     }
@@ -94,5 +103,9 @@ public class ZJobsPlugin extends ZPlugin {
 
     public PaperComponent getPaperComponent() {
         return paperComponent;
+    }
+
+    public EconomyProvider getEconomyProvider() {
+        return economyProvider;
     }
 }

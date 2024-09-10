@@ -40,4 +40,6 @@ public interface JobManager {
     void updatePlayerJobAttribute(CommandSender sender, OfflinePlayer offlinePlayer, String name, double value, AdminAction action, AttributeType type);
 
     void loadOfflinePlayer(UUID uuid, Consumer<PlayerJobs> consumer);
+
+    void updateJobEconomies();
 }

@@ -284,4 +284,9 @@ public class ZJobManager extends ZUtils implements JobManager {
             }
         };
     }
+
+    @Override
+    public void updateJobEconomies() {
+        this.players.values().forEach(PlayerJobs::updateJobEconomies);
+    }
 }
