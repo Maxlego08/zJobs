@@ -14,4 +14,6 @@ public interface StorageManager {
     void upsert(UUID uniqueId, PlayerJob playerJob, boolean force);
 
     void deleteJob(UUID uniqueId, String fileName);
+
+    void onDisable();
 }

@@ -58,6 +58,7 @@ public class ZJobsPlugin extends ZPlugin {
 
         this.preDisable();
 
+        this.storageManager.onDisable();
         this.saveFiles();
 
         this.postDisable();

@@ -11,7 +11,7 @@ public class CommandJobsAdminPrestige extends VCommand {
     public CommandJobsAdminPrestige(ZJobsPlugin plugin) {
         super(plugin);
         this.setPermission(Permission.ZJOBS_ADMIN_PRESTIGE);
-        this.addSubCommand("Prestige");
+        this.addSubCommand("prestige");
         this.setDescription(Message.DESCRIPTION_ADMIN_PRESTIGE);
         this.addSubCommand(new CommandJobsAdminPrestigeAdd(plugin));
         this.addSubCommand(new CommandJobsAdminPrestigeRemove(plugin));

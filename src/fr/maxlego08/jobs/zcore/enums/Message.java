@@ -64,28 +64,28 @@ public enum Message {
 
     LEAVE_ERROR_CANT("&cYou can’t leave this job."),
     LEAVE_ERROR("&cYou do not have the jobs &f%name%&c."),
-    LEAVE_SUCCESS(
+    LEAVE_SUCCESS_CONFIRM(
             "",
             "<red>Do you really want to quit the job %name% ?",
             "<green><hover:show_text:'Click to confirm!'><click:run_command:'/job leaveconfirm %name%'>ᴄᴏɴғɪʀᴍ</click></hover>",
             ""
     ),
 
-    LEAVE_SUCCESS_CONFIRM("&aYou have just quit the job &2%name%&a."),
+    LEAVE_SUCCESS("&aYou have just quit the job &2%name%&a."),
 
     ADMIN_PLAYER_JOB("&cThe &f%player% &cplayer does not have the &f%name% &cjob."),
 
-    ADMIN_LEVEL_ADD("You just added %level% level to the %player%’s job %name%&a."),
-    ADMIN_LEVEL_SET("You just set the level of the job %name% to %level% for %player%&a."),
-    ADMIN_LEVEL_REMOVE("You have just removed %level% level from the %player%’s job %name%&a."),
+    ADMIN_LEVEL_ADD("&aYou just added &a%value% &alevel to the &f%player%&a’s job #34ebb7%name%&a."),
+    ADMIN_LEVEL_SET("&aYou just set the level of the job #34ebb7%name%&a to &a%value%&a for &f%player%&a."),
+    ADMIN_LEVEL_REMOVE("&aYou have just removed &a%value%&a level from the &f%player%&a’s job #34ebb7%name%&a."),
 
-    ADMIN_PRESTIGE_ADD("You just added %prestige% prestige to the %player%’s job %name%&a."),
-    ADMIN_PRESTIGE_SET("You just set the prestige of the job %name% to %prestige% for %player%&a."),
-    ADMIN_PRESTIGE_REMOVE("You have just removed %prestige% prestige from the %player%’s job %name%&a."),
+    ADMIN_PRESTIGE_ADD("&aYou just added &a%value%&a prestige to the &f%player%&a’s job #34ebb7%name%&a."),
+    ADMIN_PRESTIGE_SET("&aYou just set the prestige of the job #34ebb7%name%&a to &a%value%&a for &f%player%&a."),
+    ADMIN_PRESTIGE_REMOVE("&aYou have just removed&a %value%&a prestige from the&f %player%&a’s job #34ebb7%name%&a."),
 
-    ADMIN_EXPERIENCE_ADD("You just added %experience% experience to the %player%’s job %name%&a."),
-    ADMIN_EXPERIENCE_SET("You just set the experience of the job %name% to %experience% for %player%&a."),
-    ADMIN_EXPERIENCE_REMOVE("You have just removed %experience% experience from the %player%’s job %name%&a."),
+    ADMIN_EXPERIENCE_ADD("&aYou just added &a%value%&a experience to the &f%player%&a’s job #34ebb7%name%&a."),
+    ADMIN_EXPERIENCE_SET("&aYou just set the experience of the job #34ebb7%name%&a to &a%value%&a for&f %player%&a."),
+    ADMIN_EXPERIENCE_REMOVE("&aYou have just removed &a%value%&a experience from the &f%player%&a’s job #34ebb7%name%&a."),
 
     ;
 

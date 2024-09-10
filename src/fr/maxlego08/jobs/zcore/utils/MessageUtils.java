@@ -78,7 +78,7 @@ public abstract class MessageUtils extends LocationUtils {
      * @param args    the arguments for the message.
      */
     private void sendTchatMessage(Player player, Message message, Object... args) {
-        if (message.getMessages().size() > 0) {
+        if (message.getMessages().size() > 1) {
             message.getMessages().forEach(msg -> message(player, this.papi(getMessage(msg, args), player)));
         } else {
             message(player, this.papi((message.getType() == MessageType.WITHOUT_PREFIX ? "" : Message.PREFIX.msg()) + getMessage(message, args), player));

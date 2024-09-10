@@ -229,7 +229,7 @@ public class ZJobManager extends ZUtils implements JobManager {
                 case EXPERIENCE -> processExperienceAction(playerJobs, playerJob, job, offlinePlayer, value, action);
             };
 
-            message(sender, message, "%name%", name, "%value%", value, "%player%", offlinePlayer.getName());
+            message(sender, message, "%name%", job.getName(), "%value%", type == AttributeType.EXPERIENCE ? value : (int) value, "%player%", offlinePlayer.getName());
             this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJob, true);
         });
     }

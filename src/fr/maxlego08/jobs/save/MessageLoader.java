@@ -159,21 +159,16 @@ public class MessageLoader extends YamlUtils implements Savable {
                 MessageType messageType = MessageType.valueOf(configuration.getString(key + ".type", "TCHAT").toUpperCase());
                 message.setType(messageType);
                 switch (messageType) {
-                    case ACTION:
-                    case TCHAT_AND_ACTION: {
+                    case ACTION, TCHAT_AND_ACTION -> {
                         message.setMessage(configuration.getString(key + ".message"));
-                        break;
                     }
-                    case CENTER:
-                    case TCHAT:
-                    case WITHOUT_PREFIX: {
+                    case CENTER, TCHAT, WITHOUT_PREFIX -> {
                         List<String> messages = configuration.getStringList(key + ".messages");
                         if (messages.isEmpty()) {
                             message.setMessage(configuration.getString(key + ".message"));
                         } else message.setMessages(messages);
-                        break;
                     }
-                    case TITLE: {
+                    case TITLE -> {
                         String title = configuration.getString(key + ".title");
                         String subtitle = configuration.getString(key + ".subtitle");
                         int fadeInTime = configuration.getInt(key + ".fadeInTime");
@@ -187,7 +182,6 @@ public class MessageLoader extends YamlUtils implements Savable {
                         titles.put("end", fadeOutTime);
                         titles.put("isUse", true);
                         message.setTitles(titles);
-                        break;
                     }
                 }
 
