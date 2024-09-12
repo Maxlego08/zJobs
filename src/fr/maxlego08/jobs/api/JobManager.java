@@ -42,4 +42,8 @@ public interface JobManager {
     void loadOfflinePlayer(UUID uuid, Consumer<PlayerJobs> consumer);
 
     void updateJobEconomies();
+
+    void addPoints(UUID uniqueId, int points);
+
+    void updatePoints(CommandSender sender, OfflinePlayer offlinePlayer, int points, AdminAction action);
 }

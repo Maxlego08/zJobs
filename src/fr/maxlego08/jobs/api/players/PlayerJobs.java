@@ -31,4 +31,12 @@ public interface PlayerJobs {
     void process(Player player, PlayerJob playerJob, Job job, double experience, boolean initialCall);
 
     void updateJobEconomies();
+
+    int getPoints();
+
+    void setPoints(int points);
+
+    void addPoints(int points);
+
+    void removePoints(int points);
 }

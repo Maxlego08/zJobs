@@ -27,13 +27,15 @@ public class ZPlayerJobs implements PlayerJobs {
     private final UUID uniqueId;
     private final List<PlayerJob> jobs;
     private JobBossBar jobBossBar;
+    private int points;
     private double updateMoney;
 
 
-    public ZPlayerJobs(ZJobsPlugin plugin, UUID uniqueId, List<PlayerJob> jobs) {
+    public ZPlayerJobs(ZJobsPlugin plugin, UUID uniqueId, List<PlayerJob> jobs, int points) {
         this.plugin = plugin;
         this.uniqueId = uniqueId;
         this.jobs = jobs;
+        this.points = points;
     }
 
     @Override
@@ -210,5 +212,25 @@ public class ZPlayerJobs implements PlayerJobs {
         this.plugin.getEconomyProvider().depositMoney(offlinePlayer, this.updateMoney);
 
         this.updateMoney = 0;
+    }
+
+    @Override
+    public int getPoints() {
+        return points;
+    }
+
+    @Override
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    @Override
+    public void addPoints(int points) {
+        this.points += points;
+    }
+
+    @Override
+    public void removePoints(int points) {
+        this.points -= points;
     }
 }

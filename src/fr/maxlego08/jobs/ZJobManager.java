@@ -150,7 +150,7 @@ public class ZJobManager extends ZUtils implements JobManager {
             return;
         }
 
-        PlayerJobs playerJobs = this.players.computeIfAbsent(player.getUniqueId(), uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>()));
+        PlayerJobs playerJobs = this.players.computeIfAbsent(player.getUniqueId(), uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>(), 0));
         if (playerJobs.hasJob(job)) {
             message(player, Message.JOIN_ERROR_ALREADY, "%name%", name);
             return;
@@ -288,5 +288,34 @@ public class ZJobManager extends ZUtils implements JobManager {
     @Override
     public void updateJobEconomies() {
         this.players.values().forEach(PlayerJobs::updateJobEconomies);
+    }
+
+    @Override
+    public void addPoints(UUID uniqueId, int points) {
+        PlayerJobs playerJobs = this.players.computeIfAbsent(uniqueId, uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>(), 0));
+        playerJobs.addPoints(points);
+        this.plugin.getStorageManager().upsert(uniqueId, playerJobs.getPoints());
+    }
+
+    @Override
+    public void updatePoints(CommandSender sender, OfflinePlayer offlinePlayer, int points, AdminAction action) {
+        PlayerJobs playerJobs = this.players.computeIfAbsent(offlinePlayer.getUniqueId(), uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>(), 0));
+        Message message = switch (action) {
+            case ADD -> {
+                playerJobs.addPoints(points);
+                yield Message.ADMIN_POINTS_ADD;
+            }
+            case REMOVE -> {
+                playerJobs.removePoints(points);
+                yield Message.ADMIN_POINTS_REMOVE;
+            }
+            case SET -> {
+                playerJobs.setPoints(points);
+                yield Message.ADMIN_POINTS_SET;
+            }
+        };
+
+        message(sender, message, "%value%", points, "%player%", offlinePlayer.getName());
+        this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJobs.getPoints());
     }
 }

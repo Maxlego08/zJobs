@@ -6,7 +6,9 @@ import fr.maxlego08.jobs.api.players.PlayerJobs;
 import fr.maxlego08.jobs.api.storage.StorageManager;
 import fr.maxlego08.jobs.api.storage.StorageType;
 import fr.maxlego08.jobs.dto.PlayerJobDTO;
+import fr.maxlego08.jobs.dto.PlayerPointsDTO;
 import fr.maxlego08.jobs.migrations.CreateJobPlayerMigration;
+import fr.maxlego08.jobs.migrations.CreatePlayerPointsMigration;
 import fr.maxlego08.jobs.players.ZPlayerJob;
 import fr.maxlego08.jobs.players.ZPlayerJobs;
 import fr.maxlego08.sarah.DatabaseConfiguration;
@@ -76,6 +78,7 @@ public class ZStorageManager implements StorageManager {
         MigrationManager.setDatabaseConfiguration(databaseConfiguration);
 
         MigrationManager.registerMigration(new CreateJobPlayerMigration());
+        MigrationManager.registerMigration(new CreatePlayerPointsMigration());
 
         MigrationManager.execute(connection, JULogger.from(this.plugin.getLogger()));
 
@@ -85,7 +88,9 @@ public class ZStorageManager implements StorageManager {
     @Override
     public PlayerJobs loadPlayerJobs(UUID uniqueId) {
         List<PlayerJobDTO> playerJobDTOS = this.requestHelper.select("%prefix%jobs", PlayerJobDTO.class, table -> table.where("unique_id", uniqueId));
-        return new ZPlayerJobs(this.plugin, uniqueId, playerJobDTOS.stream().map(ZPlayerJob::new).collect(Collectors.toList()));
+        List<PlayerPointsDTO> playerPointsDTOS = this.requestHelper.select("%prefix%points", PlayerPointsDTO.class, table -> table.where("unique_id", uniqueId));
+        int points = playerPointsDTOS.isEmpty() ? 0 : playerPointsDTOS.get(0).points();
+        return new ZPlayerJobs(this.plugin, uniqueId, playerJobDTOS.stream().map(ZPlayerJob::new).collect(Collectors.toList()), points);
     }
 
     @Override
@@ -109,6 +114,16 @@ public class ZStorageManager implements StorageManager {
 
         executeUpsert(uniqueId, playerJob);
         jobLastUpdateTimes.put(playerJob.getJobId(), currentTime);
+    }
+
+    @Override
+    public void upsert(UUID uniqueId, int points) {
+        this.plugin.getScheduler().runTaskAsynchronously(() -> {
+            this.requestHelper.upsert("%prefix%jobs", table -> {
+                table.uuid("unique_id", uniqueId).primary();
+                table.bigInt("points", points);
+            });
+        });
     }
 
     private void executeUpsert(UUID uniqueId, PlayerJob playerJob) {

@@ -53,6 +53,10 @@ public enum Message {
     DESCRIPTION_ADMIN_PRESTIGE_ADD("Add prestige to a player's job"),
     DESCRIPTION_ADMIN_PRESTIGE_SET("Define prestige to a player's job"),
     DESCRIPTION_ADMIN_PRESTIGE_REMOVE("Remove prestige to a player's job"),
+    DESCRIPTION_ADMIN_POINTS("Show admin points commands"),
+    DESCRIPTION_ADMIN_POINTS_ADD("Add points to a player"),
+    DESCRIPTION_ADMIN_POINTS_SET("Define points to a player"),
+    DESCRIPTION_ADMIN_POINTS_REMOVE("Remove points to a player"),
 
     PROGRESSION_BOSSBAR("#2fe082%job-name% #434343- #f7f725%job-experience%&8/#f78e25%job-max-experience% #434343- #2fe082P%job-prestige% lvl %job-level%"),
 
@@ -86,6 +90,10 @@ public enum Message {
     ADMIN_EXPERIENCE_ADD("&aYou just added &a%value%&a experience to the &f%player%&a’s job #34ebb7%name%&a."),
     ADMIN_EXPERIENCE_SET("&aYou just set the experience of the job #34ebb7%name%&a to &a%value%&a for&f %player%&a."),
     ADMIN_EXPERIENCE_REMOVE("&aYou have just removed &a%value%&a experience from the &f%player%&a’s job #34ebb7%name%&a."),
+
+    ADMIN_POINTS_ADD("&aYou just added &a%value%&a points to &f%player%&a."),
+    ADMIN_POINTS_SET("&aYou just set the points to &a%value%&a for&f %player%&a."),
+    ADMIN_POINTS_REMOVE("&aYou have just removed &a%value%&a experience from &f%player%&a."),
 
     ;
 
