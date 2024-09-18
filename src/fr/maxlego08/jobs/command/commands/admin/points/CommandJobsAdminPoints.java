@@ -16,6 +16,7 @@ public class CommandJobsAdminPoints extends VCommand {
         this.addSubCommand(new CommandJobsAdminPointsAdd(plugin));
         this.addSubCommand(new CommandJobsAdminPointsRemove(plugin));
         this.addSubCommand(new CommandJobsAdminPointsSet(plugin));
+        this.addSubCommand(new CommandJobsAdminPointsInfo(plugin));
     }
 
     @Override

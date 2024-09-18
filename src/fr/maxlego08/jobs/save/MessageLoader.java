@@ -64,6 +64,7 @@ public class MessageLoader extends YamlUtils implements Savable {
 
             if (message.getType() != MessageType.TCHAT) {
                 configuration.set(path + ".type", message.getType().name());
+                configuration.set(path + ".message", message.getMessage());
             }
             if (message.getType().equals(MessageType.TCHAT) || message.getType().equals(MessageType.ACTION) || message.getType().equals(MessageType.CENTER)) {
 

@@ -15,9 +15,9 @@ public class CommandJobsAdminPointsSet extends VCommand {
 
     public CommandJobsAdminPointsSet(ZJobsPlugin plugin) {
         super(plugin);
-        this.setPermission(Permission.ZJOBS_ADMIN_PRESTIGE_SET);
+        this.setPermission(Permission.ZJOBS_ADMIN_POINTS_SET);
         this.addSubCommand("set");
-        this.setDescription(Message.DESCRIPTION_ADMIN_PRESTIGE_SET);
+        this.setDescription(Message.DESCRIPTION_ADMIN_POINTS_SET);
         this.addRequireArgOfflinePlayer();
         this.addRequireArg("points", (a, b) -> Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
     }

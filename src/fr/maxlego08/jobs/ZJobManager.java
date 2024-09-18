@@ -318,4 +318,18 @@ public class ZJobManager extends ZUtils implements JobManager {
         message(sender, message, "%value%", points, "%player%", offlinePlayer.getName());
         this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), playerJobs.getPoints());
     }
+
+    @Override
+    public void showPoints(CommandSender sender, OfflinePlayer offlinePlayer) {
+        var optional = getPlayerJobs(offlinePlayer.getUniqueId());
+        if (optional.isPresent()) {
+            sendPoints(sender, offlinePlayer, optional.get().getPoints());
+        } else {
+            this.plugin.getScheduler().runTaskAsynchronously(() -> sendPoints(sender, offlinePlayer, this.plugin.getStorageManager().getPoints(offlinePlayer.getUniqueId())));
+        }
+    }
+
+    private void sendPoints(CommandSender sender, OfflinePlayer offlinePlayer, long points) {
+        message(sender, Message.ADMIN_POINTS_INFO, "%player%", offlinePlayer.getName(), "%points%", points);
+    }
 }

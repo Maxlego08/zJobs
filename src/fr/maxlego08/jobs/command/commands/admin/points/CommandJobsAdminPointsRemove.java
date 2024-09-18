@@ -14,9 +14,9 @@ public class CommandJobsAdminPointsRemove extends VCommand {
 
     public CommandJobsAdminPointsRemove(ZJobsPlugin plugin) {
         super(plugin);
-        this.setPermission(Permission.ZJOBS_ADMIN_PRESTIGE_ADD);
+        this.setPermission(Permission.ZJOBS_ADMIN_POINTS_REMOVE);
         this.addSubCommand("remove");
-        this.setDescription(Message.DESCRIPTION_ADMIN_PRESTIGE_REMOVE);
+        this.setDescription(Message.DESCRIPTION_ADMIN_POINTS_REMOVE);
         this.addRequireArgOfflinePlayer();
         this.addRequireArg("points", (a, b) -> Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
     }

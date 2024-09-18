@@ -55,8 +55,10 @@ public enum Message {
     DESCRIPTION_ADMIN_PRESTIGE_REMOVE("Remove prestige to a player's job"),
     DESCRIPTION_ADMIN_POINTS("Show admin points commands"),
     DESCRIPTION_ADMIN_POINTS_ADD("Add points to a player"),
+    DESCRIPTION_ADMIN_POINTS_INFO("Get player points info"),
     DESCRIPTION_ADMIN_POINTS_SET("Define points to a player"),
     DESCRIPTION_ADMIN_POINTS_REMOVE("Remove points to a player"),
+    DESCRIPTION_ADMIN_BLOCK_INFO("Get information on a block"),
 
     PROGRESSION_BOSSBAR("#2fe082%job-name% #434343- #f7f725%job-experience%&8/#f78e25%job-max-experience% #434343- #2fe082P%job-prestige% lvl %job-level%"),
 
@@ -94,6 +96,16 @@ public enum Message {
     ADMIN_POINTS_ADD("&aYou just added &a%value%&a points to &f%player%&a."),
     ADMIN_POINTS_SET("&aYou just set the points to &a%value%&a for&f %player%&a."),
     ADMIN_POINTS_REMOVE("&aYou have just removed &a%value%&a experience from &f%player%&a."),
+    ADMIN_POINTS_INFO("&f%player%&8: &7%points% points"),
+
+    ADMIN_BLOCKINFO_ERROR("&cImpossible to find the block."),
+    ADMIN_BLOCKINFO_MATERIAL(
+            "",
+            "&fLocation&8: &e%world% %x% %y% %z%",
+            "&fMaterial&8: &e%material%"
+    ),
+    ADMIN_BLOCKINFO_AGE(MessageType.WITHOUT_PREFIX, "&fBlock Age&8: &e%age%&8/&6%maxAge%"),
+    ADMIN_BLOCKINFO_FOOTER(MessageType.WITHOUT_PREFIX, ""),
 
     ;
 

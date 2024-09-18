@@ -129,7 +129,7 @@ public class ZStorageManager implements StorageManager {
 
     private void executeUpsert(UUID uniqueId, PlayerJob playerJob) {
         this.plugin.getScheduler().runTaskAsynchronously(() -> {
-            this.requestHelper.upsert(Tables.JOBS,table -> {
+            this.requestHelper.upsert(Tables.JOBS, table -> {
                 table.uuid("unique_id", uniqueId).primary();
                 table.string("job_id", playerJob.getJobId()).primary();
                 table.bigInt("level", playerJob.getLevel());
@@ -140,31 +140,32 @@ public class ZStorageManager implements StorageManager {
     }
 
     private void startUpdateTask() {
-        this.plugin.getScheduler().runTaskTimerAsynchronously(100L, 100L, () -> {
+        this.plugin.getScheduler().runTaskTimerAsynchronously(100L, 100L, this::update);
+    }
 
-            this.plugin.getJobManager().updateJobEconomies();
+    private void update() {
+        this.plugin.getJobManager().updateJobEconomies();
 
-            long currentTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
 
-            this.pendingUpdates.forEach((uniqueId, jobsMap) -> {
+        this.pendingUpdates.forEach((uniqueId, jobsMap) -> {
 
-                Map<String, Long> jobLastUpdateTimes = lastUpdateTime.getOrDefault(uniqueId, new ConcurrentHashMap<>());
-                Iterator<Map.Entry<String, PlayerJob>> iterator = jobsMap.entrySet().iterator();
+            Map<String, Long> jobLastUpdateTimes = lastUpdateTime.getOrDefault(uniqueId, new ConcurrentHashMap<>());
+            Iterator<Map.Entry<String, PlayerJob>> iterator = jobsMap.entrySet().iterator();
 
-                while (iterator.hasNext()) {
-                    Map.Entry<String, PlayerJob> entry = iterator.next();
-                    String jobId = entry.getKey();
-                    PlayerJob playerJob = entry.getValue();
+            while (iterator.hasNext()) {
+                Map.Entry<String, PlayerJob> entry = iterator.next();
+                String jobId = entry.getKey();
+                PlayerJob playerJob = entry.getValue();
 
-                    long lastTime = jobLastUpdateTimes.getOrDefault(jobId, 0L);
+                long lastTime = jobLastUpdateTimes.getOrDefault(jobId, 0L);
 
-                    if (currentTime - lastTime >= 5000) {
-                        executeUpsert(uniqueId, playerJob);
-                        jobLastUpdateTimes.put(jobId, currentTime);
-                        iterator.remove();
-                    }
+                if (currentTime - lastTime >= 5000) {
+                    executeUpsert(uniqueId, playerJob);
+                    jobLastUpdateTimes.put(jobId, currentTime);
+                    iterator.remove();
                 }
-            });
+            }
         });
     }
 
@@ -184,7 +185,17 @@ public class ZStorageManager implements StorageManager {
     }
 
     @Override
-    public void onDisable() {
+    public long getPoints(UUID uniqueId) {
+        List<PlayerPointsDTO> playerPointsDTOS = this.requestHelper.select(Tables.POINTS, PlayerPointsDTO.class, table -> table.where("unique_id", uniqueId));
+        return playerPointsDTOS.isEmpty() ? 0 : playerPointsDTOS.get(0).points();
+    }
 
+    public RequestHelper getRequestHelper() {
+        return requestHelper;
+    }
+
+    @Override
+    public void onDisable() {
+        this.update();
     }
 }

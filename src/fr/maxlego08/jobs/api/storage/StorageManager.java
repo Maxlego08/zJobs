@@ -18,4 +18,6 @@ public interface StorageManager {
     void deleteJob(UUID uniqueId, String fileName);
 
     void onDisable();
+
+    long getPoints(UUID uniqueId);
 }
