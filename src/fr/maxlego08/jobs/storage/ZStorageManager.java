@@ -1,6 +1,7 @@
 package fr.maxlego08.jobs.storage;
 
 import fr.maxlego08.jobs.ZJobsPlugin;
+import fr.maxlego08.jobs.api.Tables;
 import fr.maxlego08.jobs.api.players.PlayerJob;
 import fr.maxlego08.jobs.api.players.PlayerJobs;
 import fr.maxlego08.jobs.api.storage.StorageManager;
@@ -87,8 +88,8 @@ public class ZStorageManager implements StorageManager {
 
     @Override
     public PlayerJobs loadPlayerJobs(UUID uniqueId) {
-        List<PlayerJobDTO> playerJobDTOS = this.requestHelper.select("%prefix%jobs", PlayerJobDTO.class, table -> table.where("unique_id", uniqueId));
-        List<PlayerPointsDTO> playerPointsDTOS = this.requestHelper.select("%prefix%points", PlayerPointsDTO.class, table -> table.where("unique_id", uniqueId));
+        List<PlayerJobDTO> playerJobDTOS = this.requestHelper.select(Tables.JOBS, PlayerJobDTO.class, table -> table.where("unique_id", uniqueId));
+        List<PlayerPointsDTO> playerPointsDTOS = this.requestHelper.select(Tables.POINTS, PlayerPointsDTO.class, table -> table.where("unique_id", uniqueId));
         int points = playerPointsDTOS.isEmpty() ? 0 : playerPointsDTOS.get(0).points();
         return new ZPlayerJobs(this.plugin, uniqueId, playerJobDTOS.stream().map(ZPlayerJob::new).collect(Collectors.toList()), points);
     }
@@ -119,7 +120,7 @@ public class ZStorageManager implements StorageManager {
     @Override
     public void upsert(UUID uniqueId, int points) {
         this.plugin.getScheduler().runTaskAsynchronously(() -> {
-            this.requestHelper.upsert("%prefix%jobs", table -> {
+            this.requestHelper.upsert(Tables.POINTS, table -> {
                 table.uuid("unique_id", uniqueId).primary();
                 table.bigInt("points", points);
             });
@@ -128,7 +129,7 @@ public class ZStorageManager implements StorageManager {
 
     private void executeUpsert(UUID uniqueId, PlayerJob playerJob) {
         this.plugin.getScheduler().runTaskAsynchronously(() -> {
-            this.requestHelper.upsert("%prefix%jobs", table -> {
+            this.requestHelper.upsert(Tables.JOBS,table -> {
                 table.uuid("unique_id", uniqueId).primary();
                 table.string("job_id", playerJob.getJobId()).primary();
                 table.bigInt("level", playerJob.getLevel());
@@ -170,7 +171,7 @@ public class ZStorageManager implements StorageManager {
     @Override
     public void deleteJob(UUID uniqueId, String jobId) {
         this.plugin.getScheduler().runTaskAsynchronously(() -> {
-            this.requestHelper.delete("%prefix%jobs", table -> {
+            this.requestHelper.delete(Tables.JOBS, table -> {
                 table.where("unique_id", uniqueId).primary();
                 table.where("job_id", jobId);
             });

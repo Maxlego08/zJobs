@@ -2,7 +2,6 @@ package fr.maxlego08.jobs.command.commands.admin.points;
 
 import fr.maxlego08.jobs.ZJobsPlugin;
 import fr.maxlego08.jobs.api.enums.AdminAction;
-import fr.maxlego08.jobs.api.enums.AttributeType;
 import fr.maxlego08.jobs.command.VCommand;
 import fr.maxlego08.jobs.zcore.enums.Message;
 import fr.maxlego08.jobs.zcore.enums.Permission;
@@ -19,18 +18,16 @@ public class CommandJobsAdminPointsRemove extends VCommand {
         this.addSubCommand("remove");
         this.setDescription(Message.DESCRIPTION_ADMIN_PRESTIGE_REMOVE);
         this.addRequireArgOfflinePlayer();
-        this.addRequireArg("job", (a, b) -> plugin.getJobManager().getJobsName());
-        this.addRequireArg("prestige", (a, b) -> Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
+        this.addRequireArg("points", (a, b) -> Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
     }
 
     @Override
     protected CommandType perform(ZJobsPlugin plugin) {
 
         OfflinePlayer player = this.argAsOfflinePlayer(0);
-        String jobName = this.argAsString(1);
-        int prestige = this.argAsInteger(2);
+        int points = this.argAsInteger(1);
 
-        plugin.getJobManager().updatePlayerJobAttribute(sender, player, jobName, prestige, AdminAction.REMOVE, AttributeType.PRESTIGE);
+        plugin.getJobManager().updatePoints(sender, player, points, AdminAction.REMOVE);
 
         return CommandType.SUCCESS;
     }

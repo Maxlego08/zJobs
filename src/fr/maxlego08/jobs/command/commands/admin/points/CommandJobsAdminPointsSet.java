@@ -19,18 +19,16 @@ public class CommandJobsAdminPointsSet extends VCommand {
         this.addSubCommand("set");
         this.setDescription(Message.DESCRIPTION_ADMIN_PRESTIGE_SET);
         this.addRequireArgOfflinePlayer();
-        this.addRequireArg("job", (a, b) -> plugin.getJobManager().getJobsName());
-        this.addRequireArg("prestige", (a, b) -> Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
+        this.addRequireArg("points", (a, b) -> Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9"));
     }
 
     @Override
     protected CommandType perform(ZJobsPlugin plugin) {
 
         OfflinePlayer player = this.argAsOfflinePlayer(0);
-        String jobName = this.argAsString(1);
-        int prestige = this.argAsInteger(2);
+        int points = this.argAsInteger(1);
 
-        plugin.getJobManager().updatePlayerJobAttribute(sender, player, jobName, prestige, AdminAction.SET, AttributeType.PRESTIGE);
+        plugin.getJobManager().updatePoints(sender, player, points, AdminAction.SET);
 
         return CommandType.SUCCESS;
     }
