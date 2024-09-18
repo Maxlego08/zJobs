@@ -145,6 +145,12 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
+      <groupId>dev.krakenied</groupId>
+      <artifactId>blocktracker</artifactId>
+      <version>1.0.6</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.github.Maxlego08</groupId>
       <artifactId>zMenu-APi</artifactId>
       <version>1.0.3.4</version>

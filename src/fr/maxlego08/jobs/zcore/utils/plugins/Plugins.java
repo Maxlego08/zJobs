@@ -9,7 +9,8 @@ public enum Plugins {
 	CITIZENS("Citizens"),
 	TRANSLATIONAPI("TranslationAPI"),
 	ZTRANSLATOR("zTranslator"),
-	
+	BLOCKTRACKER("BlockTracker"),
+
 	;
 
 	private final String name;

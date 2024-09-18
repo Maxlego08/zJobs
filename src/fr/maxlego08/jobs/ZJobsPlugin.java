@@ -2,11 +2,14 @@ package fr.maxlego08.jobs;
 
 import fr.maxlego08.jobs.api.JobManager;
 import fr.maxlego08.jobs.api.economy.EconomyProvider;
+import fr.maxlego08.jobs.api.hooks.BlockHook;
 import fr.maxlego08.jobs.api.storage.StorageManager;
 import fr.maxlego08.jobs.command.commands.CommandJobs;
 import fr.maxlego08.jobs.component.PaperComponent;
 import fr.maxlego08.jobs.economy.EmptyProvider;
 import fr.maxlego08.jobs.economy.VaultProvider;
+import fr.maxlego08.jobs.hooks.BlockTrackerHook;
+import fr.maxlego08.jobs.hooks.EmptyHook;
 import fr.maxlego08.jobs.placeholder.LocalPlaceholder;
 import fr.maxlego08.jobs.save.Config;
 import fr.maxlego08.jobs.save.MessageLoader;
@@ -31,6 +34,7 @@ public class ZJobsPlugin extends ZPlugin {
     private InventoryManager inventoryManager;
     private ButtonManager buttonManager;
     private EconomyProvider economyProvider = new EmptyProvider();
+    private BlockHook blockHook = new EmptyHook();
 
     @Override
     public void onEnable() {
@@ -57,6 +61,10 @@ public class ZJobsPlugin extends ZPlugin {
 
         if (isEnable(Plugins.VAULT)) {
             this.economyProvider = new VaultProvider(this);
+        }
+
+        if (isEnable(Plugins.BLOCKTRACKER)) {
+            this.blockHook = new BlockTrackerHook();
         }
 
         this.postEnable();
@@ -107,5 +115,9 @@ public class ZJobsPlugin extends ZPlugin {
 
     public EconomyProvider getEconomyProvider() {
         return economyProvider;
+    }
+
+    public BlockHook getBlockHook() {
+        return blockHook;
     }
 }

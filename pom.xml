@@ -173,5 +173,11 @@
             <artifactId>exp4j</artifactId>
             <version>0.4.8</version>
         </dependency>
+        <dependency>
+            <groupId>dev.krakenied</groupId>
+            <artifactId>blocktracker</artifactId>
+            <version>1.0.6</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
