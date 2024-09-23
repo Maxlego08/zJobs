@@ -60,6 +60,7 @@ actions:
     money: 0.2
 
 rewards:
+
   - level: -1
     prestige: -1
     actions:
@@ -68,6 +69,9 @@ rewards:
       - type: message
         messages:
           - "&8(#42f59bJobs&8) &fYou are now #34ebb7ᴍɪɴᴇʀ &fP%prestige% &flvl #f7f725%level%"
+      - type: zjobs_add_points
+        points: 1
+
   - level: 5
     prestige: 1
     actions:
@@ -75,6 +79,7 @@ rewards:
         commands:
           - "eco give %player% 500"
           - "bc %player% just passed to level 5 of the miner jobs!"
+
   - level: 10
     prestige: 1
     actions:

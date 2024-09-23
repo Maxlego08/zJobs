@@ -16,6 +16,7 @@ import fr.maxlego08.jobs.save.MessageLoader;
 import fr.maxlego08.jobs.storage.ZStorageManager;
 import fr.maxlego08.jobs.zcore.ZPlugin;
 import fr.maxlego08.jobs.zcore.utils.plugins.Plugins;
+import fr.maxlego08.jobs.zmenu.loader.AddPointLoader;
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
 import fr.maxlego08.menu.api.scheduler.ZScheduler;
@@ -49,6 +50,10 @@ public class ZJobsPlugin extends ZPlugin {
 
         this.inventoryManager = getProvider(InventoryManager.class);
         this.buttonManager = getProvider(ButtonManager.class);
+
+        this.loadActions();
+        this.loadButtons();
+        this.loadInventories();
 
         this.addSave(new MessageLoader(this));
         this.addListener(new JobListener(this));
@@ -98,6 +103,7 @@ public class ZJobsPlugin extends ZPlugin {
         this.reloadConfig();
         this.jobManager.loadJobs();
         Config.getInstance().loadConfiguration(getConfig(), this);
+        this.loadInventories();
         super.reloadFiles();
     }
 
@@ -119,5 +125,17 @@ public class ZJobsPlugin extends ZPlugin {
 
     public BlockHook getBlockHook() {
         return blockHook;
+    }
+
+    private void loadActions() {
+        this.buttonManager.registerAction(new AddPointLoader(this));
+    }
+
+    private void loadButtons() {
+
+    }
+
+    public void loadInventories() {
+
     }
 }
