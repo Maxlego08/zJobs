@@ -271,7 +271,7 @@ public class ZJobManager extends ZUtils implements JobManager {
     private Message processExperienceAction(PlayerJobs playerJobs, PlayerJob playerJob, Job job, OfflinePlayer offlinePlayer, double experience, AdminAction action) {
         return switch (action) {
             case ADD -> {
-                playerJobs.process(offlinePlayer.getPlayer(), playerJob, job, experience, false);
+                playerJobs.process(offlinePlayer.getPlayer(), playerJob, job, experience, false, JobActionType.COMMAND.toAction(""));
                 yield Message.ADMIN_EXPERIENCE_ADD;
             }
             case REMOVE -> {

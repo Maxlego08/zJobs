@@ -4,11 +4,18 @@ import fr.maxlego08.jobs.ZJobsPlugin;
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobManager;
 import fr.maxlego08.jobs.api.JobReward;
+import fr.maxlego08.jobs.api.actions.ActionInfo;
 import fr.maxlego08.jobs.api.enums.JobActionType;
+import fr.maxlego08.jobs.api.event.events.JobExpGainEvent;
+import fr.maxlego08.jobs.api.event.events.JobLevelEvent;
+import fr.maxlego08.jobs.api.event.events.JobMoneyGainEvent;
+import fr.maxlego08.jobs.api.event.events.JobPrestigeEvent;
+import fr.maxlego08.jobs.api.event.events.JobRewardEvent;
 import fr.maxlego08.jobs.api.players.PlayerJob;
 import fr.maxlego08.jobs.api.players.PlayerJobs;
 import fr.maxlego08.jobs.api.storage.StorageManager;
 import fr.maxlego08.jobs.bossbar.JobBossBar;
+import fr.maxlego08.jobs.save.Config;
 import fr.maxlego08.jobs.zcore.utils.ElapsedTime;
 import fr.maxlego08.menu.MenuPlugin;
 import fr.maxlego08.menu.api.requirement.Action;
@@ -112,16 +119,26 @@ public class ZPlayerJobs implements PlayerJobs {
 
             elapsedTime.endDisplay();
 
+            var actionInfo = type.toAction(target);
             if (action.getMoney() > 0) {
-                this.updateMoney += action.getMoney();
+
+                var event = new JobMoneyGainEvent(player, this, playerJob, job, actionInfo, action.getMoney());
+                if (Config.isEnable(event) && !event.callEvent()) return;
+                this.updateMoney += event.getMoney();
+
             }
 
-            this.process(player, playerJob, job, action.getExperience(), true);
+            this.process(player, playerJob, job, action.getExperience(), true, actionInfo);
         }
     }
 
     @Override
-    public void process(Player player, PlayerJob playerJob, Job job, double experience, boolean initialCall) {
+    public void process(Player player, PlayerJob playerJob, Job job, double experience, boolean initialCall, ActionInfo<?> actionInfo) {
+
+        // Event
+        var event = new JobExpGainEvent(player, this, playerJob, job, actionInfo, experience);
+        if (Config.isEnable(event) && !event.callEvent()) return;
+        experience = event.getExperience();
 
         // Mise à jour des niveaux
         playerJob.process(experience);
@@ -134,19 +151,30 @@ public class ZPlayerJobs implements PlayerJobs {
             double remainingExperience = playerJob.getExperience() - maxExperience;
 
             // Mise à jour du niveau
-            playerJob.nextLevel();
-            playerJob.setExperience(0);
+
+            int nextLevel = playerJob.getLevel() + 1;
+            var levelEvent = new JobLevelEvent(player, this, playerJob, job, nextLevel, 0);
+            if (Config.isEnable(levelEvent) && !levelEvent.callEvent()) return;
+
+            playerJob.setLevel(levelEvent.getLevel());
+            playerJob.setExperience(levelEvent.getExperience());
 
             // On vérifie si on peut changer de prestige
             if (playerJob.getLevel() > job.getMaxLevels()) {
-                playerJob.setLevel(1);
-                playerJob.nextPrestige();
+
+                int nextPrestige = playerJob.getPrestige();
+                var prestigeEvent = new JobPrestigeEvent(player, this, playerJob, job, nextPrestige, 1, 0);
+                if (Config.isEnable(prestigeEvent) && !prestigeEvent.callEvent()) return;
+
+                playerJob.setLevel(prestigeEvent.getLevel());
+                playerJob.setPrestige(prestigeEvent.getPrestige());
+                playerJob.setExperience(prestigeEvent.getExperience());
 
                 // On va vérifier le prestige
                 // ToDo
             }
 
-            processReward(player, job, playerJob.getLevel(), playerJob.getLevel() - 1, playerJob.getPrestige(), playerJob.getPrestige() - 1);
+            processReward(player, playerJob, job, playerJob.getLevel(), playerJob.getLevel() - 1, playerJob.getPrestige(), playerJob.getPrestige() - 1);
 
             if (this.jobBossBar != null) {
                 this.jobBossBar.updateMaxExperience(job.getExperience(playerJob.getLevel(), playerJob.getPrestige()));
@@ -154,7 +182,7 @@ public class ZPlayerJobs implements PlayerJobs {
             this.updateBossBar(player, playerJob, job);
 
             if (remainingExperience > 0) {
-                this.process(player, playerJob, job, remainingExperience, false);
+                this.process(player, playerJob, job, remainingExperience, false, actionInfo);
             }
         }
 
@@ -164,8 +192,7 @@ public class ZPlayerJobs implements PlayerJobs {
         }
     }
 
-
-    private void processReward(Player player, Job job, int newLevel, int oldLevel, int newPrestige, int oldPrestige) {
+    private void processReward(Player player, PlayerJob playerJob, Job job, int newLevel, int oldLevel, int newPrestige, int oldPrestige) {
         if (player == null) return;
 
         Placeholders placeholders = new Placeholders();
@@ -177,17 +204,21 @@ public class ZPlayerJobs implements PlayerJobs {
         InventoryDefault inventoryDefault = new InventoryDefault();
         inventoryDefault.setPlugin(MenuPlugin.getInstance());
 
-        this.plugin.getScheduler().runTask(player.getLocation(), () -> {
-            for (JobReward reward : job.getRewards()) {
-                int rewardLevel = reward.getLevel();
-                int rewardPrestige = reward.getPrestige();
-                if ((rewardLevel == -1 || rewardLevel == newLevel) && (rewardPrestige == -1 || rewardPrestige == newPrestige)) {
-                    for (Action rewardAction : reward.getActions()) {
-                        rewardAction.preExecute(player, null, inventoryDefault, placeholders);
-                    }
+        for (JobReward reward : job.getRewards()) {
+            int rewardLevel = reward.getLevel();
+            int rewardPrestige = reward.getPrestige();
+            if ((rewardLevel == -1 || rewardLevel == newLevel) && (rewardPrestige == -1 || rewardPrestige == newPrestige)) {
+
+                var event = new JobRewardEvent(player, this, playerJob, job, oldLevel, oldPrestige, reward, newLevel, newPrestige);
+                if (Config.isEnable(event) && !event.callEvent()) return;
+
+                reward = event.getJobReward();
+
+                for (Action rewardAction : reward.getActions()) {
+                    rewardAction.preExecute(player, null, inventoryDefault, placeholders);
                 }
             }
-        });
+        }
     }
 
     private void updateBossBar(Player player, PlayerJob playerJob, Job job) {

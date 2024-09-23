@@ -3,6 +3,7 @@ package fr.maxlego08.jobs.save;
 import fr.maxlego08.jobs.ZJobsPlugin;
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobManager;
+import fr.maxlego08.jobs.api.event.JobEvent;
 import fr.maxlego08.menu.api.utils.TypedMapAccessor;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -24,6 +25,7 @@ public class Config {
     public static BossBar.Color progressionBarColor;
     public static BossBar.Overlay progressionBarOverlay;
     public static Map<String, Integer> jobLimitPermissions = new HashMap<>();
+    public static Map<String, Boolean> eventInformations = new HashMap<>();
 
     /**
      * static Singleton instance.
@@ -52,6 +54,20 @@ public class Config {
         return instance;
     }
 
+    public static int getJobLimit(Permissible permissible) {
+        int limit = 0;
+        for (String permission : jobLimitPermissions.keySet()) {
+            if (permissible.hasPermission(permission)) {
+                limit = Math.max(jobLimitPermissions.get(permission), limit);
+            }
+        }
+        return limit;
+    }
+
+    public static boolean isEnable(JobEvent event) {
+        return eventInformations.getOrDefault(event.getClass().getSimpleName(), true);
+    }
+
     public void loadConfiguration(FileConfiguration configuration, ZJobsPlugin plugin) {
 
         JobManager jobManager = plugin.getJobManager();
@@ -64,21 +80,19 @@ public class Config {
         progressionBarColor = BossBar.Color.valueOf(configuration.getString("progression-bar.color", "WHITE").toUpperCase());
         progressionBarOverlay = BossBar.Overlay.valueOf(configuration.getString("progression-bar.overlay", "PROGRESS").toUpperCase());
 
-        jobLimitPermissions.clear();
+        jobLimitPermissions = new HashMap<>();
         configuration.getMapList("jobs-limit-permissions").forEach(map -> {
             TypedMapAccessor accessor = new TypedMapAccessor((Map<String, Object>) map);
             jobLimitPermissions.put(accessor.getString("permission"), accessor.getInt("limit"));
         });
-    }
 
-    public static int getJobLimit(Permissible permissible) {
-        int limit = 0;
-        for (String permission : jobLimitPermissions.keySet()) {
-            if (permissible.hasPermission(permission)) {
-                limit = Math.max(jobLimitPermissions.get(permission), limit);
+        eventInformations = new HashMap<>();
+        var configurationSectionEvents = configuration.getConfigurationSection("events");
+        if (configurationSectionEvents != null) {
+            for (String eventName : configurationSectionEvents.getKeys(false)) {
+                eventInformations.put(eventName, configurationSectionEvents.getBoolean(eventName, true));
             }
         }
-        return limit;
     }
 
 }

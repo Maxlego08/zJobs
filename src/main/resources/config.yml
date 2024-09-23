@@ -53,3 +53,10 @@ jobs-limit-permissions:
     limit: 3
 
 default-economy: "VAULT"
+
+events:
+  JobsExpGainEvent: true
+  JobLevelEvent: true
+  JobPrestigeEvent: true
+  JobRewardEvent: true
+  JobMoneyGainEvent: true
