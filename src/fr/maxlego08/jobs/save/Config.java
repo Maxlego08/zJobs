@@ -26,6 +26,7 @@ public class Config {
     public static BossBar.Overlay progressionBarOverlay;
     public static Map<String, Integer> jobLimitPermissions = new HashMap<>();
     public static Map<String, Boolean> eventInformations = new HashMap<>();
+    public static List<String> disabledWorlds = new ArrayList<>();
 
     /**
      * static Singleton instance.
@@ -93,6 +94,8 @@ public class Config {
                 eventInformations.put(eventName, configurationSectionEvents.getBoolean(eventName, true));
             }
         }
+
+        disabledWorlds = configuration.getStringList("disabled-worlds");
     }
 
 }

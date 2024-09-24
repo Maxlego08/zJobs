@@ -2,12 +2,11 @@ package fr.maxlego08.jobs.actions;
 
 import fr.maxlego08.jobs.api.enums.JobActionType;
 import org.bukkit.Material;
-import org.bukkit.Tag;
 
-public class BlockTagAction extends ZJobAction<Tag<Material>> {
+public class MaterialAction extends ZJobAction<Material> {
 
     private final JobActionType type;
-    public BlockTagAction(Tag<Material> target, double experience, double money, JobActionType type) {
+    public MaterialAction(Material target, double experience, double money, JobActionType type) {
         super(target, experience, money);
         this.type = type;
     }
@@ -19,6 +18,6 @@ public class BlockTagAction extends ZJobAction<Tag<Material>> {
 
     @Override
     public boolean isAction(Object target) {
-        return target instanceof Material material && this.target.isTagged(material);
+        return target instanceof Material material && material == this.target;
     }
 }

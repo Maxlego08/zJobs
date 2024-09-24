@@ -37,6 +37,9 @@ database-configuration:
 
 default-jobs:
   - "miner"
+  - "farmer"
+  - "lumberjack"
+  - "enchanter"
 
 decimal-format: "#.##"
 
@@ -60,3 +63,7 @@ events:
   JobPrestigeEvent: true
   JobRewardEvent: true
   JobMoneyGainEvent: true
+
+# Allows setting a world list where jobs are disabled
+disabled-worlds:
+  - "world_the_end"

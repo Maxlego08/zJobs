@@ -48,6 +48,7 @@ public class ZJobManager extends ZUtils implements JobManager {
             this.plugin.saveResource("jobs/miner.yml", false);
             this.plugin.saveResource("jobs/lumberjack.yml", false);
             this.plugin.saveResource("jobs/farmer.yml", false);
+            this.plugin.saveResource("jobs/enchanter.yml", false);
         }
 
         this.jobs.clear();
@@ -108,6 +109,11 @@ public class ZJobManager extends ZUtils implements JobManager {
 
         ElapsedTime elapsedTime = new ElapsedTime("Job Action " + action + " for " + player.getName() + " : " + target);
         elapsedTime.start();
+
+        // Disable worlds
+        if (Config.disabledWorlds.contains(player.getWorld().getName())) {
+            return;
+        }
 
         var optional = getPlayerJobs(player.getUniqueId());
         if (optional.isEmpty()) return;
