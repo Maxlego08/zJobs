@@ -4,8 +4,8 @@ import fr.maxlego08.jobs.actions.BlockAction;
 import fr.maxlego08.jobs.actions.BlockTagAction;
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobAction;
-import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.JobReward;
+import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.zcore.utils.TagRegistry;
 import fr.maxlego08.jobs.zcore.utils.loader.Loader;
 import fr.maxlego08.menu.api.requirement.Action;
@@ -63,13 +63,13 @@ public class JobLoader implements Loader<Job> {
             try {
 
                 JobActionType jobActionType = JobActionType.valueOf(accessor.getString("type").toUpperCase());
-                if (jobActionType == JobActionType.BLOCK_BREAK) {
+                if (jobActionType.isMaterial()) {
                     if (accessor.contains("material")) {
                         Material material = Material.valueOf(accessor.getString("material").toUpperCase());
-                        jobActions.add(new BlockAction(material, experience, money));
+                        jobActions.add(new BlockAction(material, experience, money, jobActionType));
                     } else if (accessor.contains("tag")) {
                         Tag<Material> tag = TagRegistry.getTag(accessor.getString("tag").toUpperCase());
-                        jobActions.add(new BlockTagAction(tag, experience, money));
+                        jobActions.add(new BlockTagAction(tag, experience, money, jobActionType));
                     } else {
                         plugin.getLogger().severe("Impossible to find the tag or material for BLOCK BREAK in file " + file.getAbsolutePath());
                     }

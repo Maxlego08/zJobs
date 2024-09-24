@@ -5,13 +5,15 @@ import org.bukkit.Material;
 
 public class BlockAction extends ZJobAction<Material> {
 
-    public BlockAction(Material target, double experience, double money) {
+    private final JobActionType type;
+    public BlockAction(Material target, double experience, double money, JobActionType type) {
         super(target, experience, money);
+        this.type = type;
     }
 
     @Override
     public JobActionType getType() {
-        return JobActionType.BLOCK_BREAK;
+        return this.type;
     }
 
     @Override

@@ -162,7 +162,7 @@ public class ZPlayerJobs implements PlayerJobs {
             // On vérifie si on peut changer de prestige
             if (playerJob.getLevel() > job.getMaxLevels()) {
 
-                int nextPrestige = playerJob.getPrestige();
+                int nextPrestige = playerJob.getPrestige() + 1;
                 var prestigeEvent = new JobPrestigeEvent(player, this, playerJob, job, nextPrestige, 1, 0);
                 if (Config.isEnable(prestigeEvent) && !prestigeEvent.callEvent()) return;
 

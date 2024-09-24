@@ -1,5 +1,5 @@
 # Name of the job. This name will be displayed to the players in messages related to this job.
-name: "ᴍɪɴᴇʀ"
+name: "ғᴀʀᴍᴇʀ"
 
 # Base value used to calculate the experience required for each level.
 # This value will be used in the experience formula.
@@ -38,55 +38,41 @@ can-join: false
 # - FISHING: fishing
 #
 # For more information, you can refer to the documentation: https://zjobs.groupez.dev/actions
-#
-# The order of actions in this list is important.
-# For example, all blocks that can be mined with a pickaxe will give experience,
-# but specific ores will give more experience as they are defined first.
-# The MINEABLE_PICKAXE tag defines all blocks that can be mined using a pickaxe.
-# If you want to add conditions for specific blocks, you need to define those actions before using the general tag.
 actions:
 
-  - type: BLOCK_BREAK # Action type for breaking a block.
-    tag: EMERALD_ORES # This tag defines all emerald ore blocks.
-    experience: 20 # Amount of experience earned by breaking the block.
-    money: 2 # Amount of money earned by breaking the block.
-  - type: BLOCK_BREAK
-    tag: DIAMOND_ORES
-    experience: 15
+  - type: FARMING
+    material: POTATOES
+    experience: 1
     money: 0.2
-  - type: BLOCK_BREAK
-    tag: LAPIS_ORES
-    experience: 4
+
+  - type: FARMING
+    material: CARROTS
+    experience: 1
     money: 0.2
-  - type: BLOCK_BREAK
-    tag: REDSTONE_ORES
-    experience: 4
+
+  - type: FARMING
+    material: SUGAR_CANE
+    experience: 1
     money: 0.2
-  - type: BLOCK_BREAK
-    tag: COAL_ORES
-    experience: 3
+
+  - type: FARMING
+    material: WHEAT
+    experience: 0.9
     money: 0.2
-  - type: BLOCK_BREAK
-    tag: GOLD_ORES
-    experience: 8
+
+  - type: FARMING
+    material: CACTUS
+    experience: 5
     money: 0.2
+
   - type: BLOCK_BREAK
-    tag: IRON_ORES
-    experience: 3
-    money: 0.2
-  - type: BLOCK_BREAK
-    tag: COPPER_ORES
+    material: MELON
     experience: 2
     money: 0.2
 
   - type: BLOCK_BREAK
-    material: STONE # Specific action for breaking a stone block.
-    experience: 1
-    money: 0.2
-
-  - type: BLOCK_BREAK
-    tag: MINEABLE_PICKAXE # All blocks that can be mined with a pickaxe will give a small amount of experience.
-    experience: 0.5
+    material: PUMPKIN
+    experience: 2
     money: 0.2
 
 # Allows defining rewards that the player will receive when they level up or increase in prestige.
@@ -103,7 +89,7 @@ rewards:
         sound: ENTITY_PLAYER_LEVELUP
       - type: message # Message sent to the player to inform them of their new level and prestige.
         messages:
-          - "&8(#42f59bJobs&8) &fYou are now #34ebb7ᴍɪɴᴇʀ &fP%prestige% &flvl #f7f725%level%"
+          - "&8(#42f59bJobs&8) &fYou are now #34ebb7ғᴀʀᴍᴇʀ &fP%prestige% &flvl #f7f725%level%"
       - type: zjobs_add_points # Adds a job point each time a level is gained.
         points: 1
 
@@ -114,7 +100,7 @@ rewards:
       - type: console_commands # Console commands to reward the player.
         commands:
           - "eco give %player% 500" # Gives the player 500 units of currency.
-          - "bc %player% just passed to level 5 of the miner jobs!" # Sends a message to all players announcing the level-up.
+          - "bc %player% just passed to level 5 of the farmer jobs!" # Sends a message to all players announcing the level-up.
 
   # Reward for when the player reaches level 10 and prestige 1.
   - level: 10
@@ -123,4 +109,4 @@ rewards:
       - type: console_commands
         commands:
           - "eco give %player% 500"
-          - "bc %player% just passed to level 10 of the miner jobs!"
+          - "bc %player% just passed to level 10 of the farmer jobs!"

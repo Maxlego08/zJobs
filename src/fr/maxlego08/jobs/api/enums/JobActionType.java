@@ -26,4 +26,10 @@ public enum JobActionType {
         };
     }
 
+    public boolean isMaterial() {
+        return switch (this) {
+            case BLOCK_BREAK, BLOCK_PLACE, FARMING, FISHING -> true;
+            case COMMAND, KILL_ENTITY -> false;
+        };
+    }
 }

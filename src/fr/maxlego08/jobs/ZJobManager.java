@@ -46,6 +46,8 @@ public class ZJobManager extends ZUtils implements JobManager {
         if (!folder.exists()) {
             folder.mkdirs();
             this.plugin.saveResource("jobs/miner.yml", false);
+            this.plugin.saveResource("jobs/lumberjack.yml", false);
+            this.plugin.saveResource("jobs/farmer.yml", false);
         }
 
         this.jobs.clear();
@@ -138,7 +140,7 @@ public class ZJobManager extends ZUtils implements JobManager {
     @Override
     public void join(Player player, String name) {
 
-        Optional<Job> optional = getJob(name);
+        Optional<Job> optional = this.getJob(name);
         if (optional.isEmpty()) {
             message(player, Message.DOESNT_EXIST, "%name%", name);
             return;

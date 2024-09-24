@@ -62,7 +62,7 @@ public enum Message {
 
     PROGRESSION_BOSSBAR("#2fe082%job-name% #434343- #f7f725%job-experience%&8/#f78e25%job-max-experience% #434343- #2fe082P%job-prestige% lvl %job-level%"),
 
-    DOESNT_EXIST("&cThe jobs &f%name% &c does not exist."),
+    DOESNT_EXIST("&cThe jobs &f%name%&c does not exist."),
     JOIN_ERROR_CANT("&cYou can’t join this job."),
     JOIN_ERROR_ALREADY("&cYou already have the jobs &f%name%&c."),
     JOIN_ERROR_LIMIT("&cYou have reached the job limit &8(&7%max%&8)&c, you cannot join a new job."),

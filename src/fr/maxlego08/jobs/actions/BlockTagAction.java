@@ -6,13 +6,15 @@ import org.bukkit.Tag;
 
 public class BlockTagAction extends ZJobAction<Tag<Material>> {
 
-    public BlockTagAction(Tag<Material> target, double experience, double money) {
+    private final JobActionType type;
+    public BlockTagAction(Tag<Material> target, double experience, double money, JobActionType type) {
         super(target, experience, money);
+        this.type = type;
     }
 
     @Override
     public JobActionType getType() {
-        return JobActionType.BLOCK_BREAK;
+        return this.type;
     }
 
     @Override
