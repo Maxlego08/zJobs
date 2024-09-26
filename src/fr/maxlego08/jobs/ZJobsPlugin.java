@@ -20,6 +20,7 @@ import fr.maxlego08.jobs.zmenu.loader.AddPointLoader;
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
 import fr.maxlego08.menu.api.scheduler.ZScheduler;
+import org.bukkit.plugin.ServicePriority;
 
 /**
  * System to create your plugins very simply Projet:
@@ -45,6 +46,9 @@ public class ZJobsPlugin extends ZPlugin {
 
         this.preEnable();
         this.saveDefaultConfig();
+
+        var servicesManager = getServer().getServicesManager();
+        servicesManager.register(JobManager.class, this.jobManager, this, ServicePriority.Highest);
 
         this.registerCommand("zjobs", new CommandJobs(this), "jobs");
 

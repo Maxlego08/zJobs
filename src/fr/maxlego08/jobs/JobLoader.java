@@ -1,5 +1,6 @@
 package fr.maxlego08.jobs;
 
+import fr.maxlego08.jobs.actions.BrewAction;
 import fr.maxlego08.jobs.actions.EnchantmentAction;
 import fr.maxlego08.jobs.actions.EntityAction;
 import fr.maxlego08.jobs.actions.MaterialAction;
@@ -19,6 +20,7 @@ import org.bukkit.Tag;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.potion.PotionType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,6 +72,7 @@ public class JobLoader implements Loader<Job> {
 
                 JobActionType jobActionType = JobActionType.valueOf(accessor.getString("type").toUpperCase());
                 if (jobActionType.isMaterial()) {
+
                     if (accessor.contains("material")) {
                         Material material = Material.valueOf(accessor.getString("material").toUpperCase());
                         jobActions.add(new MaterialAction(material, experience, money, jobActionType));
@@ -79,9 +82,12 @@ public class JobLoader implements Loader<Job> {
                     } else {
                         plugin.getLogger().severe("Impossible to find the tag or material for BLOCK BREAK in file " + file.getAbsolutePath());
                     }
+
                 } else if (jobActionType.isEntityType()) {
+
                     EntityType entityType = EntityType.valueOf(accessor.getString("entity").toUpperCase());
                     jobActions.add(new EntityAction(entityType, experience, money));
+
                 } else if (jobActionType == JobActionType.ENCHANT) {
 
                     Enchantments enchantments = plugin.getInventoryManager().getEnchantments();
@@ -94,6 +100,18 @@ public class JobLoader implements Loader<Job> {
                     int minimumCost = accessor.getInt("minimumCost", 0);
 
                     jobActions.add(new EnchantmentAction(material, experience, money, enchantment, minimumLevel, minimumCost));
+
+                } else if (jobActionType == JobActionType.BREW) {
+
+                    String potionName = accessor.getString("potion-type", null);
+                    String potionMaterialName = accessor.getString("potion-material", "POTION");
+                    String ingredientName = accessor.getString("ingredient", null);
+
+                    PotionType potionType = potionName == null ? null : PotionType.valueOf(potionName.toUpperCase());
+                    Material material = ingredientName == null ? null : Material.valueOf(ingredientName.toUpperCase());
+                    Material potionMaterial = Material.valueOf(potionMaterialName.toUpperCase());
+
+                    jobActions.add(new BrewAction(potionType, experience, money, potionMaterial, material));
                 }
 
             } catch (Exception exception) {

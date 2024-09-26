@@ -1,0 +1,448 @@
+# Name of the job. This name will be displayed to the players in messages related to this job.
+name: "ʙʀᴇᴡᴇʀ"
+
+# Base value used to calculate the experience required for each level.
+# This value will be used in the experience formula.
+base-experience: 100
+
+# The Maximum number of levels the player can reach in this job.
+max-levels: 100
+
+# Maximum number of prestiges available.
+# Prestige allows the player to restart leveling after reaching the maximum level.
+# With each prestige, the experience required to level up increases.
+# When a player reaches the max level, their prestige increases, and they start leveling again.
+max-prestiges: 10
+
+# Formula used to calculate the amount of experience required for each level.
+# The following variables are available for use in the formula:
+# - baseExperience: the base value of experience (defined above)
+# - level: the player's current level
+# - prestige: the player's current prestige
+# - maxPrestiges: the maximum number of prestiges defined
+formula: "baseExperience * (1 + 0.05 * level + 0.005 * level^2) * (1 + 0.3 * (prestige / maxPrestiges))"
+
+# Determines if the player can leave this job.
+# false means the player cannot leave the job once they have joined.
+can-leave: false
+
+# Determines if a player can join this job.
+# If false, this job must be added to the default jobs list in the config.yml file to be assigned automatically to players.
+can-join: false
+
+# List of actions the player must perform to earn experience in this job.
+# Here are some possible action types:
+# - BLOCK_BREAK: breaking a specific block
+# - KILL_ENTITY: killing a specific entity
+# - FARMING: harvesting crops
+# - FISHING: fishing
+#
+# For more information, you can refer to the documentation: https://zjobs.groupez.dev/actions
+actions:
+
+  # Potions normales
+  - type: BREW
+    potion-type: AWKWARD
+    experience: 5
+    money: 1
+
+  - type: BREW
+    potion-type: STRENGTH
+    experience: 20
+    money: 5
+
+  - type: BREW
+    potion-type: SWIFTNESS
+    experience: 15
+    money: 5
+
+  - type: BREW
+    potion-type: REGENERATION
+    experience: 20
+    money: 5
+
+  - type: BREW
+    potion-type: POISON
+    experience: 15
+    money: 5
+
+  - type: BREW
+    potion-type: NIGHT_VISION
+    experience: 15
+    money: 5
+
+  - type: BREW
+    potion-type: FIRE_RESISTANCE
+    experience: 15
+    money: 5
+
+  - type: BREW
+    potion-type: HEALING
+    experience: 15
+    money: 5
+
+  - type: BREW
+    potion-type: INVISIBILITY
+    experience: 20
+    money: 5
+
+  # Potions longues
+  - type: BREW
+    potion-type: LONG_STRENGTH
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_SWIFTNESS
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_REGENERATION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_POISON
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_NIGHT_VISION
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_FIRE_RESISTANCE
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_INVISIBILITY
+    experience: 30
+    money: 5
+
+  # Potions améliorées
+  - type: BREW
+    potion-type: STRONG_STRENGTH
+    experience: 40
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_SWIFTNESS
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_HEALING
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_HARMING
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_POISON
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_REGENERATION
+    experience: 40
+    money: 5
+
+  # Potions Splash
+  - type: BREW
+    potion-type: STRENGTH
+    potion-material: SPLASH_POTION
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: SWIFTNESS
+    potion-material: SPLASH_POTION
+    experience: 20
+    money: 5
+
+  - type: BREW
+    potion-type: REGENERATION
+    potion-material: SPLASH_POTION
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: POISON
+    potion-material: SPLASH_POTION
+    experience: 20
+    money: 5
+
+  - type: BREW
+    potion-type: NIGHT_VISION
+    potion-material: SPLASH_POTION
+    experience: 20
+    money: 5
+
+  - type: BREW
+    potion-type: FIRE_RESISTANCE
+    potion-material: SPLASH_POTION
+    experience: 20
+    money: 5
+
+  - type: BREW
+    potion-type: HEALING
+    potion-material: SPLASH_POTION
+    experience: 20
+    money: 5
+
+  - type: BREW
+    potion-type: INVISIBILITY
+    potion-material: SPLASH_POTION
+    experience: 25
+    money: 5
+
+  # Potions Splash Longues
+  - type: BREW
+    potion-type: LONG_STRENGTH
+    potion-material: SPLASH_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_SWIFTNESS
+    potion-material: SPLASH_POTION
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_REGENERATION
+    potion-material: SPLASH_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_POISON
+    potion-material: SPLASH_POTION
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_NIGHT_VISION
+    potion-material: SPLASH_POTION
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_FIRE_RESISTANCE
+    potion-material: SPLASH_POTION
+    experience: 25
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_INVISIBILITY
+    potion-material: SPLASH_POTION
+    experience: 30
+    money: 5
+
+  # Potions Splash Améliorées
+  - type: BREW
+    potion-type: STRONG_STRENGTH
+    potion-material: SPLASH_POTION
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_SWIFTNESS
+    potion-material: SPLASH_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_REGENERATION
+    potion-material: SPLASH_POTION
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_POISON
+    potion-material: SPLASH_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_HEALING
+    potion-material: SPLASH_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_HARMING
+    potion-material: SPLASH_POTION
+    experience: 30
+    money: 5
+
+  # Potions Lingering
+  - type: BREW
+    potion-type: STRENGTH
+    potion-material: LINGERING_POTION
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: SWIFTNESS
+    potion-material: LINGERING_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: REGENERATION
+    potion-material: LINGERING_POTION
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: POISON
+    potion-material: LINGERING_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: NIGHT_VISION
+    potion-material: LINGERING_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: FIRE_RESISTANCE
+    potion-material: LINGERING_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: HEALING
+    potion-material: LINGERING_POTION
+    experience: 30
+    money: 5
+
+  - type: BREW
+    potion-type: INVISIBILITY
+    potion-material: LINGERING_POTION
+    experience: 35
+    money: 5
+
+  # Potions Lingering Longues
+  - type: BREW
+    potion-type: LONG_STRENGTH
+    potion-material: LINGERING_POTION
+    experience: 40
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_SWIFTNESS
+    potion-material: LINGERING_POTION
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_REGENERATION
+    potion-material: LINGERING_POTION
+    experience: 40
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_POISON
+    potion-material: LINGERING_POTION
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_NIGHT_VISION
+    potion-material: LINGERING_POTION
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_FIRE_RESISTANCE
+    potion-material: LINGERING_POTION
+    experience: 35
+    money: 5
+
+  - type: BREW
+    potion-type: LONG_INVISIBILITY
+    potion-material: LINGERING_POTION
+    experience: 40
+    money: 5
+
+  # Potions Lingering Améliorées
+  - type: BREW
+    potion-type: STRONG_STRENGTH
+    potion-material: LINGERING_POTION
+    experience: 45
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_SWIFTNESS
+    potion-material: LINGERING_POTION
+    experience: 40
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_REGENERATION
+    potion-material: LINGERING_POTION
+    experience: 45
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_POISON
+    potion-material: LINGERING_POTION
+    experience: 40
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_HEALING
+    potion-material: LINGERING_POTION
+    experience: 40
+    money: 5
+
+  - type: BREW
+    potion-type: STRONG_HARMING
+    potion-material: LINGERING_POTION
+    experience: 40
+    money: 5
+
+# Allows defining rewards that the player will receive when they level up or increase in prestige.
+# To set a reward for all levels, use level -1.
+# To set a reward for all prestiges, use prestige -1.
+rewards:
+
+  # This reward will be given for each level-up and prestige-up.
+  # The player will receive a sound, a message, and a job point.
+  - level: -1
+    prestige: -1
+    actions:
+      - type: sound # The sound played when the player levels up.
+        sound: ENTITY_PLAYER_LEVELUP
+      - type: message # Message sent to the player to inform them of their new level and prestige.
+        messages:
+          - "&8(#42f59bJobs&8) &fYou are now #34ebb7ʙʀᴇᴡᴇʀ &fP%prestige% &flvl #f7f725%level%"
+      - type: zjobs_add_points # Adds a job point each time a level is gained.
+        points: 1
+
+  # Reward for when the player reaches level 5 and prestige 1.
+  - level: 5
+    prestige: 1
+    actions:
+      - type: console_commands # Console commands to reward the player.
+        commands:
+          - "eco give %player% 500" # Gives the player 500 units of currency.
+          - "bc %player% just passed to level 5 of the brewer jobs!" # Sends a message to all players announcing the level-up.
+
+  # Reward for when the player reaches level 10 and prestige 1.
+  - level: 10
+    prestige: 1
+    actions:
+      - type: console_commands
+        commands:
+          - "eco give %player% 500"
+          - "bc %player% just passed to level 10 of the brewer jobs!"
