@@ -17,10 +17,20 @@ import fr.maxlego08.jobs.storage.ZStorageManager;
 import fr.maxlego08.jobs.zcore.ZPlugin;
 import fr.maxlego08.jobs.zcore.utils.plugins.Plugins;
 import fr.maxlego08.jobs.zmenu.loader.AddPointLoader;
+import fr.maxlego08.jobs.zmenu.loader.JobInfoLoader;
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
 import fr.maxlego08.menu.api.scheduler.ZScheduler;
+import fr.maxlego08.menu.exceptions.InventoryException;
 import org.bukkit.plugin.ServicePriority;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * System to create your plugins very simply Projet:
@@ -55,10 +65,6 @@ public class ZJobsPlugin extends ZPlugin {
         this.inventoryManager = getProvider(InventoryManager.class);
         this.buttonManager = getProvider(ButtonManager.class);
 
-        this.loadActions();
-        this.loadButtons();
-        this.loadInventories();
-
         this.addSave(new MessageLoader(this));
         this.addListener(new JobListener(this));
 
@@ -75,6 +81,10 @@ public class ZJobsPlugin extends ZPlugin {
         if (isEnable(Plugins.BLOCKTRACKER)) {
             this.blockHook = new BlockTrackerHook();
         }
+
+        this.loadActions();
+        this.loadButtons();
+        this.loadInventories();
 
         this.postEnable();
     }
@@ -136,10 +146,34 @@ public class ZJobsPlugin extends ZPlugin {
     }
 
     private void loadButtons() {
-
+        this.buttonManager.register(new JobInfoLoader(this));
     }
 
     public void loadInventories() {
 
+        File folder = new File(this.getDataFolder(), "inventories");
+        if (!folder.exists()) {
+            folder.mkdir();
+
+            saveResource("inventories/jobs.yml", false);
+        }
+
+        this.inventoryManager.deleteInventories(this);
+        this.files(folder, file -> {
+            try {
+                this.inventoryManager.loadInventory(this, file);
+            } catch (InventoryException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    private void files(File folder, Consumer<File> consumer) {
+        try (Stream<Path> s = Files.walk(Paths.get(folder.getPath()))) {
+            s.skip(1).map(Path::toFile).filter(File::isFile).filter(e -> e.getName().endsWith(".yml"))
+                    .forEach(consumer);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 }

@@ -69,3 +69,21 @@ events:
 # Allows setting a world list where jobs are disabled
 disabled-worlds:
   - "world_the_end"
+
+progress-bar-level:
+  icon: '|'
+  progress-color: "#0ff216"
+  color: "#828282"
+  size: 30
+
+progress-bar-prestige:
+  icon: '|'
+  progress-color: "#0ff216"
+  color: "#828282"
+  size: 30
+
+progress-bar-experience:
+  icon: '|'
+  progress-color: "#0ff216"
+  color: "#828282"
+  size: 30

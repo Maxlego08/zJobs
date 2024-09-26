@@ -1,0 +1,103 @@
+name: "&8ᴊᴏʙs"
+size: 54
+items:
+  decoration:
+    slots:
+      - 0-9
+      - 17-18
+      - 26-27
+      - 35-36
+      - 44-53
+    item:
+      material: BLACK_STAINED_GLASS_PANE
+      name: ""
+
+  miner:
+    type: ZJOBS_INFO
+    job: "miner"
+    slot: 21
+    item:
+      material: NETHERITE_PICKAXE
+      name: "#34ebb7ᴍɪɴᴇʀ"
+      lore:
+        - ""
+        - "#ffd353ℹ Progression#3f3f3f:"
+        - "#3f3f3f• %experience-progressbar% #4cd5ff%experience%#3f3f3f/&f%max-experience% &7Experiences"
+        - "#3f3f3f• %level-progressbar% #4cd5ff%level%#3f3f3f/&f%max-level% &7Levels"
+        - "#3f3f3f• %prestige-progressbar% #4cd5ff%prestige%#3f3f3f/&f%max-prestige% &7Prestiges"
+        - ""
+
+  brewer:
+    type: ZJOBS_INFO
+    job: "brewer"
+    slot: 22
+    item:
+      material: BREWING_STAND
+      name: "#34ebb7ʙʀᴇᴡᴇʀ"
+      lore:
+        - ""
+        - "#ffd353ℹ Progression#3f3f3f:"
+        - "#3f3f3f• %experience-progressbar% #4cd5ff%experience%#3f3f3f/&f%max-experience% &7Experiences"
+        - "#3f3f3f• %level-progressbar% #4cd5ff%level%#3f3f3f/&f%max-level% &7Levels"
+        - "#3f3f3f• %prestige-progressbar% #4cd5ff%prestige%#3f3f3f/&f%max-prestige% &7Prestiges"
+        - ""
+
+  enchanter:
+    type: ZJOBS_INFO
+    job: "enchanter"
+    slot: 23
+    item:
+      material: BOOK
+      name: "#34ebb7ᴇɴᴄʜᴀɴᴛᴇʀ"
+      lore:
+        - ""
+        - "#ffd353ℹ Progression#3f3f3f:"
+        - "#3f3f3f• %experience-progressbar% #4cd5ff%experience%#3f3f3f/&f%max-experience% &7Experiences"
+        - "#3f3f3f• %level-progressbar% #4cd5ff%level%#3f3f3f/&f%max-level% &7Levels"
+        - "#3f3f3f• %prestige-progressbar% #4cd5ff%prestige%#3f3f3f/&f%max-prestige% &7Prestiges"
+        - ""
+
+  farmer:
+    type: ZJOBS_INFO
+    job: "farmer"
+    slot: 30
+    item:
+      material: WHEAT
+      name: "#34ebb7ғᴀʀᴍᴇʀ"
+      lore:
+        - ""
+        - "#ffd353ℹ Progression#3f3f3f:"
+        - "#3f3f3f• %experience-progressbar% #4cd5ff%experience%#3f3f3f/&f%max-experience% &7Experiences"
+        - "#3f3f3f• %level-progressbar% #4cd5ff%level%#3f3f3f/&f%max-level% &7Levels"
+        - "#3f3f3f• %prestige-progressbar% #4cd5ff%prestige%#3f3f3f/&f%max-prestige% &7Prestiges"
+        - ""
+
+  hunter:
+    type: ZJOBS_INFO
+    job: "hunter"
+    slot: 31
+    item:
+      material: DIAMOND_SWORD
+      name: "#34ebb7ʜᴜɴᴛᴇʀ"
+      lore:
+        - ""
+        - "#ffd353ℹ Progression#3f3f3f:"
+        - "#3f3f3f• %experience-progressbar% #4cd5ff%experience%#3f3f3f/&f%max-experience% &7Experiences"
+        - "#3f3f3f• %level-progressbar% #4cd5ff%level%#3f3f3f/&f%max-level% &7Levels"
+        - "#3f3f3f• %prestige-progressbar% #4cd5ff%prestige%#3f3f3f/&f%max-prestige% &7Prestiges"
+        - ""
+
+  lumberjack:
+    type: ZJOBS_INFO
+    job: "lumberjack"
+    slot: 32
+    item:
+      material: OAK_LOG
+      name: "#34ebb7ʟᴜᴍʙᴇʀᴊᴀᴄᴋ"
+      lore:
+        - ""
+        - "#ffd353ℹ Progression#3f3f3f:"
+        - "#3f3f3f• %experience-progressbar% #4cd5ff%experience%#3f3f3f/&f%max-experience% &7Experiences"
+        - "#3f3f3f• %level-progressbar% #4cd5ff%level%#3f3f3f/&f%max-level% &7Levels"
+        - "#3f3f3f• %prestige-progressbar% #4cd5ff%prestige%#3f3f3f/&f%max-prestige% &7Prestiges"
+        - ""

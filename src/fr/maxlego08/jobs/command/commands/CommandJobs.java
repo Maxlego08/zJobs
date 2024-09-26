@@ -5,6 +5,7 @@ import fr.maxlego08.jobs.command.VCommand;
 import fr.maxlego08.jobs.command.commands.admin.CommandJobsAdmin;
 import fr.maxlego08.jobs.zcore.enums.Permission;
 import fr.maxlego08.jobs.zcore.utils.commands.CommandType;
+import org.bukkit.command.ConsoleCommandSender;
 
 public class CommandJobs extends VCommand {
 
@@ -20,7 +21,11 @@ public class CommandJobs extends VCommand {
 
     @Override
     protected CommandType perform(ZJobsPlugin plugin) {
-        syntaxMessage();
+        if (sender instanceof ConsoleCommandSender) {
+            syntaxMessage();
+        } else {
+            this.plugin.getInventoryManager().openInventory(this.player, plugin, "jobs");
+        }
         return CommandType.SUCCESS;
     }
 

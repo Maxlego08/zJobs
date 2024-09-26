@@ -4,6 +4,7 @@ import fr.maxlego08.jobs.ZJobsPlugin;
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobManager;
 import fr.maxlego08.jobs.api.event.JobEvent;
+import fr.maxlego08.jobs.api.utils.ProgressBarConfig;
 import fr.maxlego08.menu.api.utils.TypedMapAccessor;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,6 +28,9 @@ public class Config {
     public static Map<String, Integer> jobLimitPermissions = new HashMap<>();
     public static Map<String, Boolean> eventInformations = new HashMap<>();
     public static List<String> disabledWorlds = new ArrayList<>();
+    public static ProgressBarConfig progressBarLevel;
+    public static ProgressBarConfig progressBarPrestige;
+    public static ProgressBarConfig progressBarExperience;
 
     /**
      * static Singleton instance.
@@ -96,6 +100,19 @@ public class Config {
         }
 
         disabledWorlds = configuration.getStringList("disabled-worlds");
+
+        progressBarLevel = loadProgressBarConfig(configuration, "progress-bar-level");
+        progressBarPrestige = loadProgressBarConfig(configuration, "progress-bar-prestige");
+        progressBarExperience = loadProgressBarConfig(configuration, "progress-bar-experience");
+    }
+
+    private ProgressBarConfig loadProgressBarConfig(FileConfiguration configuration, String path) {
+        String icon = configuration.getString(path + ".icon", "|");
+        String progressColor = configuration.getString(path + ".progress-color", "&a");
+        String color = configuration.getString(path + ".color", "&7");
+        int size = configuration.getInt(path + ".size", 10);
+
+        return new ProgressBarConfig(icon.charAt(0), progressColor, color, size);
     }
 
 }
