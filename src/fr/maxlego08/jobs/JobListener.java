@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BrewingStand;
+import org.bukkit.block.Container;
+import org.bukkit.block.Furnace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -17,16 +19,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.inventory.BrewEvent;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.EnchantingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
@@ -87,7 +92,7 @@ public class JobListener implements Listener {
         if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH && event.getCaught() instanceof Item item) {
 
             ItemStack itemStack = item.getItemStack();
-            this.jobManager.action(player, itemStack.getType(), JobActionType.FARMING);
+            this.jobManager.action(player, itemStack.getType(), JobActionType.FISHING);
         }
     }
 
@@ -100,6 +105,15 @@ public class JobListener implements Listener {
 
         if (event.getOwner() instanceof Player player && player.isOnline()) {
             this.jobManager.action(player, animal.getType(), JobActionType.TAME);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onAnimalTame(EntityDeathEvent event) {
+
+        LivingEntity entity = event.getEntity();
+        if (entity.getKiller() != null) {
+            this.jobManager.action(entity.getKiller(), entity.getType(), JobActionType.KILL_ENTITY);
         }
     }
 
@@ -117,19 +131,20 @@ public class JobListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
-        if (event.getInventory() instanceof BrewerInventory brewerInventory) {
-            var block = brewerInventory.getHolder().getBlock();
+        var inventory = event.getInventory();
+        if (event.getWhoClicked() instanceof Player player) {
+            if ((inventory.getType() == InventoryType.BREWING || inventory.getType() == InventoryType.FURNACE || inventory.getType() == InventoryType.BLAST_FURNACE || inventory.getType() == InventoryType.SMOKER) && inventory.getHolder() instanceof Container container) {
 
-            if (block.getType() == Material.BREWING_STAND) {
-                var brewingStand = (BrewingStand) block.getState();
+                var block = container.getBlock();
+                if (block.getType() == Material.BREWING_STAND || block.getType() == Material.FURNACE || block.getType() == Material.BLAST_FURNACE || block.getType() == Material.SMOKER) {
+                    var containerState = (Container) block.getState();
 
-                if (event.getWhoClicked() instanceof Player player) {
                     var playerUUID = player.getUniqueId();
 
-                    var container = brewingStand.getPersistentDataContainer();
-                    container.set(playerKey, PersistentDataType.STRING, playerUUID.toString());
+                    var persistentDataContainer = containerState.getPersistentDataContainer();
+                    persistentDataContainer.set(playerKey, PersistentDataType.STRING, playerUUID.toString());
 
-                    brewingStand.update();
+                    containerState.update();
                 }
             }
         }
@@ -151,6 +166,26 @@ public class JobListener implements Listener {
                 Player player = Bukkit.getPlayer(playerUUID);
                 if (player != null) {
                     this.jobManager.action(player, event, JobActionType.BREW);
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onFurnaceSmelt(FurnaceSmeltEvent event) {
+        Block block = event.getBlock();
+
+        if (block.getType() == Material.FURNACE || block.getType() == Material.BLAST_FURNACE || block.getType() == Material.SMOKER) {
+            Furnace furnace = (Furnace) block.getState();
+            PersistentDataContainer container = furnace.getPersistentDataContainer();
+
+            if (container.has(playerKey, PersistentDataType.STRING)) {
+                var uuidString = container.get(playerKey, PersistentDataType.STRING);
+                var playerUUID = UUID.fromString(uuidString);
+
+                Player player = Bukkit.getPlayer(playerUUID);
+                if (player != null) {
+                    this.jobManager.action(player, event.getResult().getType(), JobActionType.SMELT);
                 }
             }
         }

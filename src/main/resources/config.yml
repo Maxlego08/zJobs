@@ -40,6 +40,8 @@ default-jobs:
   - "farmer"
   - "lumberjack"
   - "enchanter"
+  - "brewer"
+  - "hunter"
 
 decimal-format: "#.##"
 

@@ -5,13 +5,15 @@ import org.bukkit.entity.EntityType;
 
 public class EntityAction extends ZJobAction<EntityType> {
 
-    public EntityAction(EntityType target, double experience, double money) {
+    private final JobActionType actionType;
+    public EntityAction(EntityType target, double experience, double money, JobActionType actionType) {
         super(target, experience, money);
+        this.actionType = actionType;
     }
 
     @Override
     public JobActionType getType() {
-        return JobActionType.TAME;
+        return actionType;
     }
 
     @Override

@@ -8,6 +8,7 @@ import fr.maxlego08.jobs.api.actions.EntityAction;
 import fr.maxlego08.jobs.api.actions.MaterialAction;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.inventory.BrewEvent;
 
@@ -21,12 +22,13 @@ public enum JobActionType {
     COMMAND,
     TAME,
     ENCHANT,
-    BREW;
+    BREW,
+    SMELT;
 
     public ActionInfo<?> toAction(Object target) {
         return switch (this) {
-            case BLOCK_BREAK, BLOCK_PLACE, FARMING, FISHING -> new MaterialAction(this, (Material) target);
-            case KILL_ENTITY, TAME -> new EntityAction(this, (Entity) target);
+            case BLOCK_BREAK, BLOCK_PLACE, FARMING, FISHING, SMELT -> new MaterialAction(this, (Material) target);
+            case KILL_ENTITY, TAME -> new EntityAction(this, (EntityType) target);
             case COMMAND -> new CommandAction(target == null ? "" : (String) target);
             case ENCHANT -> new EnchantAction(this, (EnchantItemEvent) target);
             case BREW -> new BrewAction(this, (BrewEvent) target);
@@ -35,7 +37,7 @@ public enum JobActionType {
 
     public boolean isMaterial() {
         return switch (this) {
-            case BLOCK_BREAK, BLOCK_PLACE, FARMING, FISHING -> true;
+            case BLOCK_BREAK, BLOCK_PLACE, FARMING, FISHING, SMELT -> true;
             case COMMAND, KILL_ENTITY, TAME, ENCHANT, BREW -> false;
         };
     }

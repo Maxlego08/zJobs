@@ -86,7 +86,7 @@ public class JobLoader implements Loader<Job> {
                 } else if (jobActionType.isEntityType()) {
 
                     EntityType entityType = EntityType.valueOf(accessor.getString("entity").toUpperCase());
-                    jobActions.add(new EntityAction(entityType, experience, money));
+                    jobActions.add(new EntityAction(entityType, experience, money, jobActionType));
 
                 } else if (jobActionType == JobActionType.ENCHANT) {
 
