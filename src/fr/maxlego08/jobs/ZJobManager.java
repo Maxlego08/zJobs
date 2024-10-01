@@ -34,6 +34,7 @@ public class ZJobManager extends ZUtils implements JobManager {
     private final ZJobsPlugin plugin;
     private final List<Job> jobs = new ArrayList<>();
     private final Map<UUID, PlayerJobs> players = new HashMap<>();
+    private final Map<Player, Job> targetJobs = new HashMap<>();
 
     public ZJobManager(ZJobsPlugin plugin) {
         this.plugin = plugin;
@@ -102,6 +103,7 @@ public class ZJobManager extends ZUtils implements JobManager {
     @Override
     public void playerQuit(Player player) {
         this.players.remove(player.getUniqueId());
+        this.targetJobs.remove(player);
     }
 
     @Override
@@ -335,6 +337,16 @@ public class ZJobManager extends ZUtils implements JobManager {
         } else {
             this.plugin.getScheduler().runTaskAsynchronously(() -> sendPoints(sender, offlinePlayer, this.plugin.getStorageManager().getPoints(offlinePlayer.getUniqueId())));
         }
+    }
+
+    @Override
+    public Job getTargetJob(Player player) {
+        return this.targetJobs.get(player);
+    }
+
+    @Override
+    public void setTargetJob(Player player, Job job) {
+        this.targetJobs.put(player, job);
     }
 
     private void sendPoints(CommandSender sender, OfflinePlayer offlinePlayer, long points) {

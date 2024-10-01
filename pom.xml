@@ -166,7 +166,7 @@
             <artifactId>zMenu-APi</artifactId>
             <version>1.0.3.4</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/zmenu-1.0.3.4.jar</systemPath>
+            <systemPath>${project.basedir}/libs/zmenu-1.0.3.5.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.objecthunter</groupId>

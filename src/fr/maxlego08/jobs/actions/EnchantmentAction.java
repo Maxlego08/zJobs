@@ -14,8 +14,8 @@ public class EnchantmentAction extends ZJobAction<Material> {
     private final int minimumLevel;
     private final int minimumCost;
 
-    public EnchantmentAction(Material target, double experience, double money, Enchantment enchantment, int minimumLevel, int minimumCost) {
-        super(target, experience, money);
+    public EnchantmentAction(Material target, double experience, double money, Enchantment enchantment, int minimumLevel, int minimumCost, Material displayMaterial) {
+        super(target, experience, money, displayMaterial);
         this.enchantment = enchantment;
         this.minimumLevel = minimumLevel;
         this.minimumCost = minimumCost;

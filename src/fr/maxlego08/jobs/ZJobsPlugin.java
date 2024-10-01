@@ -16,11 +16,13 @@ import fr.maxlego08.jobs.save.MessageLoader;
 import fr.maxlego08.jobs.storage.ZStorageManager;
 import fr.maxlego08.jobs.zcore.ZPlugin;
 import fr.maxlego08.jobs.zcore.utils.plugins.Plugins;
+import fr.maxlego08.jobs.zmenu.buttons.JobValueButton;
 import fr.maxlego08.jobs.zmenu.loader.AddPointLoader;
 import fr.maxlego08.jobs.zmenu.loader.JobInfoLoader;
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
 import fr.maxlego08.menu.api.scheduler.ZScheduler;
+import fr.maxlego08.menu.button.loader.NoneLoader;
 import fr.maxlego08.menu.exceptions.InventoryException;
 import org.bukkit.plugin.ServicePriority;
 
@@ -147,6 +149,7 @@ public class ZJobsPlugin extends ZPlugin {
 
     private void loadButtons() {
         this.buttonManager.register(new JobInfoLoader(this));
+        this.buttonManager.register(new NoneLoader(this, JobValueButton.class, "ZJOBS_VALUES"));
     }
 
     public void loadInventories() {
@@ -156,6 +159,7 @@ public class ZJobsPlugin extends ZPlugin {
             folder.mkdir();
 
             saveResource("inventories/jobs.yml", false);
+            saveResource("inventories/job_info.yml", false);
         }
 
         this.inventoryManager.deleteInventories(this);

@@ -1,5 +1,6 @@
 package fr.maxlego08.jobs;
 
+import com.google.gson.JsonIOException;
 import fr.maxlego08.jobs.actions.BrewAction;
 import fr.maxlego08.jobs.actions.EnchantmentAction;
 import fr.maxlego08.jobs.actions.EntityAction;
@@ -9,6 +10,7 @@ import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.JobAction;
 import fr.maxlego08.jobs.api.JobReward;
 import fr.maxlego08.jobs.api.enums.JobActionType;
+import fr.maxlego08.jobs.zcore.utils.EntityTypeToEggConverter;
 import fr.maxlego08.jobs.zcore.utils.TagRegistry;
 import fr.maxlego08.jobs.zcore.utils.loader.Loader;
 import fr.maxlego08.menu.api.enchantment.Enchantments;
@@ -71,14 +73,17 @@ public class JobLoader implements Loader<Job> {
             try {
 
                 JobActionType jobActionType = JobActionType.valueOf(accessor.getString("type").toUpperCase());
+                String displayMaterialName = accessor.getString("display-material", null);
+                Material displayMaterial = displayMaterialName == null ? null : Material.valueOf(displayMaterialName.toUpperCase());
+
                 if (jobActionType.isMaterial()) {
 
                     if (accessor.contains("material")) {
                         Material material = Material.valueOf(accessor.getString("material").toUpperCase());
-                        jobActions.add(new MaterialAction(material, experience, money, jobActionType));
+                        jobActions.add(new MaterialAction(material, experience, money, jobActionType, displayMaterial == null ? material : displayMaterial));
                     } else if (accessor.contains("tag")) {
                         Tag<Material> tag = TagRegistry.getTag(accessor.getString("tag").toUpperCase());
-                        jobActions.add(new TagAction(tag, experience, money, jobActionType));
+                        jobActions.add(new TagAction(tag, experience, money, jobActionType, displayMaterial == null ? Material.PAPER : displayMaterial));
                     } else {
                         plugin.getLogger().severe("Impossible to find the tag or material for BLOCK BREAK in file " + file.getAbsolutePath());
                     }
@@ -86,7 +91,7 @@ public class JobLoader implements Loader<Job> {
                 } else if (jobActionType.isEntityType()) {
 
                     EntityType entityType = EntityType.valueOf(accessor.getString("entity").toUpperCase());
-                    jobActions.add(new EntityAction(entityType, experience, money, jobActionType));
+                    jobActions.add(new EntityAction(entityType, experience, money, jobActionType, displayMaterial == null ? EntityTypeToEggConverter.getSpawnEgg(entityType) : displayMaterial));
 
                 } else if (jobActionType == JobActionType.ENCHANT) {
 
@@ -99,7 +104,7 @@ public class JobLoader implements Loader<Job> {
                     int minimumLevel = accessor.getInt("minimumLevel", 0);
                     int minimumCost = accessor.getInt("minimumCost", 0);
 
-                    jobActions.add(new EnchantmentAction(material, experience, money, enchantment, minimumLevel, minimumCost));
+                    jobActions.add(new EnchantmentAction(material, experience, money, enchantment, minimumLevel, minimumCost, displayMaterial));
 
                 } else if (jobActionType == JobActionType.BREW) {
 
@@ -111,7 +116,7 @@ public class JobLoader implements Loader<Job> {
                     Material material = ingredientName == null ? null : Material.valueOf(ingredientName.toUpperCase());
                     Material potionMaterial = Material.valueOf(potionMaterialName.toUpperCase());
 
-                    jobActions.add(new BrewAction(potionType, experience, money, potionMaterial, material));
+                    jobActions.add(new BrewAction(potionType, experience, money, potionMaterial, material, displayMaterial == null ? potionMaterial : displayMaterial));
                 }
 
             } catch (Exception exception) {

@@ -13,8 +13,8 @@ public class BrewAction extends ZJobAction<PotionType> {
     private final Material potionMaterial;
     private final Material ingredient;
 
-    public BrewAction(PotionType target, double experience, double money, Material potionMaterial, Material ingredient) {
-        super(target, experience, money);
+    public BrewAction(PotionType target, double experience, double money, Material potionMaterial, Material ingredient, Material displayMaterial) {
+        super(target, experience, money, displayMaterial);
         this.potionMaterial = potionMaterial;
         this.ingredient = ingredient;
     }
@@ -51,5 +51,15 @@ public class BrewAction extends ZJobAction<PotionType> {
         }
 
         return false;
+    }
+
+    @Override
+    public void applyItemStack(ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        if (itemMeta instanceof PotionMeta potionMeta && this.target != null) {
+            potionMeta.setBasePotionType(this.target);
+        }
+        itemStack.setItemMeta(itemMeta);
     }
 }

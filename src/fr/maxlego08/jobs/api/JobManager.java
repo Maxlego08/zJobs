@@ -48,4 +48,8 @@ public interface JobManager {
     void updatePoints(CommandSender sender, OfflinePlayer offlinePlayer, int points, AdminAction action);
 
     void showPoints(CommandSender sender, OfflinePlayer player);
+
+    Job getTargetJob(Player player);
+
+    void setTargetJob(Player player, Job job);
 }

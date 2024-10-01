@@ -10,7 +10,9 @@ import fr.maxlego08.jobs.players.ZPlayerJobs;
 import fr.maxlego08.jobs.save.Config;
 import fr.maxlego08.menu.api.utils.Placeholders;
 import fr.maxlego08.menu.button.ZButton;
+import fr.maxlego08.menu.inventory.inventories.InventoryDefault;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -49,5 +51,13 @@ public class JobInfoButton extends ZButton {
         placeholders.register("prestige-progressbar", Config.progressBarPrestige.getProgressBar(playerJob.getPrestige(), job.getMaxPrestiges()));
 
         return getItemStack().build(player, false, placeholders);
+    }
+
+    @Override
+    public void onClick(Player player, InventoryClickEvent event, InventoryDefault inventory, int slot, Placeholders placeholders) {
+        super.onClick(player, event, inventory, slot, placeholders);
+        this.plugin.getJobManager().setTargetJob(player, this.job);
+        var inventoryManager = this.plugin.getInventoryManager();
+        inventoryManager.getInventory(this.plugin, "job_info").ifPresent(newInventory -> inventoryManager.openInventoryWithOldInventories(player, newInventory, 1));
     }
 }

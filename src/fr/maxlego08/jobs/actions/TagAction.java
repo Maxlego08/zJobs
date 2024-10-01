@@ -7,8 +7,8 @@ import org.bukkit.Tag;
 public class TagAction extends ZJobAction<Tag<Material>> {
 
     private final JobActionType type;
-    public TagAction(Tag<Material> target, double experience, double money, JobActionType type) {
-        super(target, experience, money);
+    public TagAction(Tag<Material> target, double experience, double money, JobActionType type, Material displayMaterial) {
+        super(target, experience, money, displayMaterial);
         this.type = type;
     }
 
