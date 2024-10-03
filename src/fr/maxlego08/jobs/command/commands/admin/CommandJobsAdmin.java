@@ -6,6 +6,7 @@ import fr.maxlego08.jobs.command.commands.admin.experience.CommandJobsAdminExper
 import fr.maxlego08.jobs.command.commands.admin.level.CommandJobsAdminLevel;
 import fr.maxlego08.jobs.command.commands.admin.points.CommandJobsAdminPoints;
 import fr.maxlego08.jobs.command.commands.admin.prestige.CommandJobsAdminPrestige;
+import fr.maxlego08.jobs.command.commands.admin.reward.CommandJobsAdminReward;
 import fr.maxlego08.jobs.zcore.enums.Message;
 import fr.maxlego08.jobs.zcore.enums.Permission;
 import fr.maxlego08.jobs.zcore.utils.commands.CommandType;
@@ -22,6 +23,7 @@ public class CommandJobsAdmin extends VCommand {
         this.addSubCommand(new CommandJobsAdminPrestige(plugin));
         this.addSubCommand(new CommandJobsAdminPoints(plugin));
         this.addSubCommand(new CommandJobsAdminInfo(plugin));
+        this.addSubCommand(new CommandJobsAdminReward(plugin));
     }
 
     @Override

@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public class ZPlayerJobs implements PlayerJobs {
@@ -33,16 +34,18 @@ public class ZPlayerJobs implements PlayerJobs {
     private final ZJobsPlugin plugin;
     private final UUID uniqueId;
     private final List<PlayerJob> jobs;
+    private final Set<Integer> rewards;
     private JobBossBar jobBossBar;
-    private int points;
+    private long points;
     private double updateMoney;
 
 
-    public ZPlayerJobs(ZJobsPlugin plugin, UUID uniqueId, List<PlayerJob> jobs, int points) {
+    public ZPlayerJobs(ZJobsPlugin plugin, UUID uniqueId, List<PlayerJob> jobs, long points, Set<Integer> rewards) {
         this.plugin = plugin;
         this.uniqueId = uniqueId;
         this.jobs = jobs;
         this.points = points;
+        this.rewards = rewards;
     }
 
     @Override
@@ -246,22 +249,27 @@ public class ZPlayerJobs implements PlayerJobs {
     }
 
     @Override
-    public int getPoints() {
+    public long getPoints() {
         return points;
     }
 
     @Override
-    public void setPoints(int points) {
+    public void setPoints(long points) {
         this.points = points;
     }
 
     @Override
-    public void addPoints(int points) {
+    public void addPoints(long points) {
         this.points += points;
     }
 
     @Override
-    public void removePoints(int points) {
+    public void removePoints(long points) {
         this.points -= points;
+    }
+
+    @Override
+    public Set<Integer> getRewards() {
+        return this.rewards;
     }
 }

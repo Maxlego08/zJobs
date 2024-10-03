@@ -17,6 +17,7 @@ public enum Permission {
     ZJOBS_ADMIN_EXPERIENCE_SET,
     ZJOBS_ADMIN_EXPERIENCE_REMOVE,
     ZJOBS_ADMIN_PRESTIGE,
+    ZJOBS_ADMIN_REWARD,
     ZJOBS_ADMIN_BLOCK_INFO,
     ZJOBS_ADMIN_PRESTIGE_ADD,
     ZJOBS_ADMIN_PRESTIGE_SET,
@@ -27,7 +28,7 @@ public enum Permission {
     ZJOBS_ADMIN_POINTS_REMOVE,
     ZJOBS_ADMIN_POINTS_INFO,
 
-    ;
+    ZJOBS_ADMIN_REWARD_SET;
 
     private final String permission;
 

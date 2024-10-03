@@ -8,6 +8,7 @@ import fr.maxlego08.jobs.api.enums.JobActionType;
 import fr.maxlego08.jobs.api.players.PlayerJob;
 import fr.maxlego08.jobs.api.players.PlayerJobs;
 import fr.maxlego08.jobs.api.storage.StorageManager;
+import fr.maxlego08.jobs.placeholder.LocalPlaceholder;
 import fr.maxlego08.jobs.players.ZPlayerJobs;
 import fr.maxlego08.jobs.save.Config;
 import fr.maxlego08.jobs.zcore.enums.Message;
@@ -23,9 +24,11 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -38,6 +41,26 @@ public class ZJobManager extends ZUtils implements JobManager {
 
     public ZJobManager(ZJobsPlugin plugin) {
         this.plugin = plugin;
+        this.registerPlaceholders();
+    }
+
+    private void registerPlaceholders() {
+        LocalPlaceholder placeholder = LocalPlaceholder.getInstance();
+
+        placeholder.register("points", (player) -> {
+            var optional = getPlayerJobs(player.getUniqueId());
+            return optional.map(PlayerJobs::getPoints).orElse(0L).toString();
+        });
+
+        placeholder.register("reward_is_claim_", (player, rewardId) -> {
+            try {
+                int id = Integer.parseInt(rewardId);
+                var optional = getPlayerJobs(player.getUniqueId());
+                return optional.map(playerJobs -> playerJobs.getRewards().contains(id)).orElse(false).toString();
+            } catch (Exception exception) {
+                return "Reward " + rewardId + " is not an integer !";
+            }
+        });
     }
 
     @Override
@@ -50,6 +73,9 @@ public class ZJobManager extends ZUtils implements JobManager {
             this.plugin.saveResource("jobs/lumberjack.yml", false);
             this.plugin.saveResource("jobs/farmer.yml", false);
             this.plugin.saveResource("jobs/enchanter.yml", false);
+            this.plugin.saveResource("jobs/brewer.yml", false);
+            this.plugin.saveResource("jobs/hunter.yml", false);
+            this.plugin.saveResource("jobs/fisherman.yml", false);
         }
 
         this.jobs.clear();
@@ -160,7 +186,7 @@ public class ZJobManager extends ZUtils implements JobManager {
             return;
         }
 
-        PlayerJobs playerJobs = this.players.computeIfAbsent(player.getUniqueId(), uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>(), 0));
+        PlayerJobs playerJobs = this.players.computeIfAbsent(player.getUniqueId(), uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>(), 0, new HashSet<>()));
         if (playerJobs.hasJob(job)) {
             message(player, Message.JOIN_ERROR_ALREADY, "%name%", name);
             return;
@@ -301,15 +327,15 @@ public class ZJobManager extends ZUtils implements JobManager {
     }
 
     @Override
-    public void addPoints(UUID uniqueId, int points) {
-        PlayerJobs playerJobs = this.players.computeIfAbsent(uniqueId, uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>(), 0));
+    public void addPoints(UUID uniqueId, long points) {
+        PlayerJobs playerJobs = this.players.computeIfAbsent(uniqueId, uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>(), 0, new HashSet<>()));
         playerJobs.addPoints(points);
         this.plugin.getStorageManager().upsert(uniqueId, playerJobs.getPoints());
     }
 
     @Override
     public void updatePoints(CommandSender sender, OfflinePlayer offlinePlayer, int points, AdminAction action) {
-        PlayerJobs playerJobs = this.players.computeIfAbsent(offlinePlayer.getUniqueId(), uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>(), 0));
+        PlayerJobs playerJobs = this.players.computeIfAbsent(offlinePlayer.getUniqueId(), uuid -> new ZPlayerJobs(this.plugin, uuid, new ArrayList<>(), 0, new HashSet<>()));
         Message message = switch (action) {
             case ADD -> {
                 playerJobs.addPoints(points);
@@ -351,5 +377,25 @@ public class ZJobManager extends ZUtils implements JobManager {
 
     private void sendPoints(CommandSender sender, OfflinePlayer offlinePlayer, long points) {
         message(sender, Message.ADMIN_POINTS_INFO, "%player%", offlinePlayer.getName(), "%points%", points);
+    }
+
+    @Override
+    public void setReward(CommandSender sender, OfflinePlayer offlinePlayer, int rewardId, boolean rewardStatus) {
+        var optional = getPlayerJobs(offlinePlayer.getUniqueId());
+        if (optional.isPresent()) {
+            setReward(sender, offlinePlayer, rewardId, rewardStatus, optional.get().getRewards());
+        } else {
+            this.plugin.getScheduler().runTaskAsynchronously(() -> setReward(sender, offlinePlayer, rewardId, rewardStatus, this.plugin.getStorageManager().getRewards(offlinePlayer.getUniqueId())));
+        }
+    }
+
+    private void setReward(CommandSender sender, OfflinePlayer offlinePlayer, int rewardId, boolean rewardStatus, Set<Integer> rewards) {
+
+        if (rewardStatus) rewards.add(rewardId);
+        else rewards.remove(rewardId);
+
+        this.plugin.getStorageManager().upsert(offlinePlayer.getUniqueId(), rewards);
+
+        message(sender, rewardStatus ? Message.ADMIN_REWARD_ADD : Message.ADMIN_REWARD_REMOVE, "%player%", offlinePlayer.getName(), "%reward%", rewardId);
     }
 }

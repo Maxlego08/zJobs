@@ -1,5 +1,6 @@
 package fr.maxlego08.jobs.api.players;
 
+import com.sun.source.doctree.SeeTree;
 import fr.maxlego08.jobs.api.Job;
 import fr.maxlego08.jobs.api.actions.ActionInfo;
 import fr.maxlego08.jobs.api.enums.JobActionType;
@@ -7,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public interface PlayerJobs {
@@ -33,11 +35,13 @@ public interface PlayerJobs {
 
     void updateJobEconomies();
 
-    int getPoints();
+    long getPoints();
 
-    void setPoints(int points);
+    void setPoints(long points);
 
-    void addPoints(int points);
+    void addPoints(long points);
 
-    void removePoints(int points);
+    void removePoints(long points);
+
+    Set<Integer> getRewards();
 }

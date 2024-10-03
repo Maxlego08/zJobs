@@ -47,45 +47,54 @@ can-join: false
 actions:
 
   - type: BLOCK_BREAK # Action type for breaking a block.
+    display-material: EMERALD_ORE
     tag: EMERALD_ORES # This tag defines all emerald ore blocks.
     experience: 20 # Amount of experience earned by breaking the block.
     money: 2 # Amount of money earned by breaking the block.
   - type: BLOCK_BREAK
+    display-material: DIAMOND_ORE
     tag: DIAMOND_ORES
     experience: 15
     money: 0.2
   - type: BLOCK_BREAK
+    display-material: LAPIS_ORE
     tag: LAPIS_ORES
     experience: 4
     money: 0.2
   - type: BLOCK_BREAK
+    display-material: REDSTONE_ORE
     tag: REDSTONE_ORES
     experience: 4
     money: 0.2
   - type: BLOCK_BREAK
+    display-material: COAL_ORE
     tag: COAL_ORES
     experience: 3
     money: 0.2
   - type: BLOCK_BREAK
+    display-material: GOLD_ORE
     tag: GOLD_ORES
     experience: 8
     money: 0.2
   - type: BLOCK_BREAK
+    display-material: IRON_ORE
     tag: IRON_ORES
     experience: 3
     money: 0.2
   - type: BLOCK_BREAK
+    display-material: COPPER_ORE
     tag: COPPER_ORES
     experience: 2
     money: 0.2
 
   - type: BLOCK_BREAK
-    material: STONE # Specific action for breaking a stone block.
+    material: STONE
     experience: 1
     money: 0.2
 
   - type: BLOCK_BREAK
-    tag: MINEABLE_PICKAXE # All blocks that can be mined with a pickaxe will give a small amount of experience.
+    display-material: DIRT
+    tag: MINEABLE_PICKAXE
     experience: 0.5
     money: 0.2
 

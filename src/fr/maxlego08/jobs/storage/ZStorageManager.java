@@ -8,8 +8,10 @@ import fr.maxlego08.jobs.api.storage.StorageManager;
 import fr.maxlego08.jobs.api.storage.StorageType;
 import fr.maxlego08.jobs.dto.PlayerJobDTO;
 import fr.maxlego08.jobs.dto.PlayerPointsDTO;
+import fr.maxlego08.jobs.dto.PlayerRewardDTO;
 import fr.maxlego08.jobs.migrations.CreateJobPlayerMigration;
 import fr.maxlego08.jobs.migrations.CreatePlayerPointsMigration;
+import fr.maxlego08.jobs.migrations.CreatePlayerRewardMigration;
 import fr.maxlego08.jobs.players.ZPlayerJob;
 import fr.maxlego08.jobs.players.ZPlayerJobs;
 import fr.maxlego08.sarah.DatabaseConfiguration;
@@ -24,9 +26,12 @@ import fr.maxlego08.sarah.logger.JULogger;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -80,6 +85,7 @@ public class ZStorageManager implements StorageManager {
 
         MigrationManager.registerMigration(new CreateJobPlayerMigration());
         MigrationManager.registerMigration(new CreatePlayerPointsMigration());
+        MigrationManager.registerMigration(new CreatePlayerRewardMigration());
 
         MigrationManager.execute(connection, JULogger.from(this.plugin.getLogger()));
 
@@ -89,9 +95,11 @@ public class ZStorageManager implements StorageManager {
     @Override
     public PlayerJobs loadPlayerJobs(UUID uniqueId) {
         List<PlayerJobDTO> playerJobDTOS = this.requestHelper.select(Tables.JOBS, PlayerJobDTO.class, table -> table.where("unique_id", uniqueId));
-        List<PlayerPointsDTO> playerPointsDTOS = this.requestHelper.select(Tables.POINTS, PlayerPointsDTO.class, table -> table.where("unique_id", uniqueId));
-        int points = playerPointsDTOS.isEmpty() ? 0 : playerPointsDTOS.get(0).points();
-        return new ZPlayerJobs(this.plugin, uniqueId, playerJobDTOS.stream().map(ZPlayerJob::new).collect(Collectors.toList()), points);
+
+        long points = getPoints(uniqueId);
+        Set<Integer> integers = getRewards(uniqueId);
+
+        return new ZPlayerJobs(this.plugin, uniqueId, playerJobDTOS.stream().map(ZPlayerJob::new).collect(Collectors.toList()), points, integers);
     }
 
     @Override
@@ -118,11 +126,21 @@ public class ZStorageManager implements StorageManager {
     }
 
     @Override
-    public void upsert(UUID uniqueId, int points) {
+    public void upsert(UUID uniqueId, long points) {
         this.plugin.getScheduler().runTaskAsynchronously(() -> {
             this.requestHelper.upsert(Tables.POINTS, table -> {
                 table.uuid("unique_id", uniqueId).primary();
                 table.bigInt("points", points);
+            });
+        });
+    }
+
+    @Override
+    public void upsert(UUID uniqueId, Set<Integer> rewards) {
+        this.plugin.getScheduler().runTaskAsynchronously(() -> {
+            this.requestHelper.upsert(Tables.REWARDS, table -> {
+                table.uuid("unique_id", uniqueId).primary();
+                table.string("content", rewards.stream().map(String::valueOf).collect(Collectors.joining(",")));
             });
         });
     }
@@ -197,5 +215,12 @@ public class ZStorageManager implements StorageManager {
     @Override
     public void onDisable() {
         this.update();
+    }
+
+    @Override
+    public Set<Integer> getRewards(UUID uniqueId) {
+        List<PlayerRewardDTO> playerRewardDTOS = this.requestHelper.select(Tables.REWARDS, PlayerRewardDTO.class, table -> table.where("unique_id", uniqueId));
+        var reward = playerRewardDTOS.isEmpty() ? "" : playerRewardDTOS.get(0).content();
+        return reward.length() == 0 ? new HashSet<>() : Arrays.stream(reward.split(",")).map(Integer::parseInt).collect(Collectors.toSet());
     }
 }

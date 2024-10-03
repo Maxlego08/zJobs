@@ -1,0 +1,66 @@
+name: "ᴘᴇᴄʜᴇᴜʀ"
+
+base-experience: 100
+
+max-levels: 100
+
+max-prestiges: 10
+
+formula: "baseExperience * (1 + 0.05 * level + 0.005 * level^2) * (1 + 0.3 * (prestige / maxPrestiges))"
+
+# Check if the player can leave the job
+can-leave: false
+
+# Checks if the player can join the job. If false, then the job must be added to the default jobs list in config.yml
+can-join: false
+
+actions:
+
+  - type: FISHING
+    material: COD
+    experience: 5
+    money: 2
+
+  - type: FISHING
+    material: SALMON
+    experience: 5
+    money: 2
+
+  - type: FISHING
+    material: TROPICAL_FISH
+    experience: 5
+    money: 2
+
+  - type: FISHING
+    material: PUFFERFISH
+    experience: 5
+    money: 2
+
+rewards:
+
+  - level: -1
+    prestige: -1
+    actions:
+      - type: sound
+        sound: ENTITY_PLAYER_LEVELUP
+      - type: message
+        messages:
+          - "&8(#42f59bJobs&8) &fYou are now #34ebb7ᴘᴇᴄʜᴇᴜʀ &fP%prestige% &flvl #f7f725%level%"
+      - type: zjobs_add_points
+        points: 1
+
+  - level: 5
+    prestige: 1
+    actions:
+      - type: console_commands
+        commands:
+          - "eco give %player% 500"
+          - "bc %player% just passed to level 5 of the pêcheur jobs!"
+
+  - level: 10
+    prestige: 1
+    actions:
+      - type: console_commands
+        commands:
+          - "eco give %player% 500"
+          - "bc %player% just passed to level 10 of the pêcheur jobs!"

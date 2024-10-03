@@ -43,7 +43,7 @@ public interface JobManager {
 
     void updateJobEconomies();
 
-    void addPoints(UUID uniqueId, int points);
+    void addPoints(UUID uniqueId, long points);
 
     void updatePoints(CommandSender sender, OfflinePlayer offlinePlayer, int points, AdminAction action);
 
@@ -52,4 +52,6 @@ public interface JobManager {
     Job getTargetJob(Player player);
 
     void setTargetJob(Player player, Job job);
+
+    void setReward(CommandSender sender, OfflinePlayer offlinePlayer, int rewardId, boolean rewardStatus);
 }

@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class JobInfoButton extends ZButton {
@@ -31,24 +32,30 @@ public class JobInfoButton extends ZButton {
 
     @Override
     public ItemStack getCustomItemStack(Player player) {
+
+        if (this.job == null) {
+            this.plugin.getLogger().severe("Impossible to find the job !");
+            return super.getCustomItemStack(player);
+        }
+
         Placeholders placeholders = new Placeholders();
 
-        PlayerJobs playerJobs = jobManager.getPlayerJobs(player.getUniqueId()).orElse(new ZPlayerJobs(plugin, player.getUniqueId(), List.of(), 0));
-        PlayerJob playerJob = playerJobs.get(job).orElse(new ZPlayerJob(job.getFileName(), 0, 0, 0.0));
+        PlayerJobs playerJobs = this.jobManager.getPlayerJobs(player.getUniqueId()).orElse(new ZPlayerJobs(this.plugin, player.getUniqueId(), List.of(), 0, new HashSet<>()));
+        PlayerJob playerJob = playerJobs.get(this.job).orElse(new ZPlayerJob(this.job.getFileName(), 0, 0, 0.0));
 
-        double maxExperience = job.getExperience(playerJob.getLevel(), playerJob.getPrestige());
+        double maxExperience = this.job.getExperience(playerJob.getLevel(), playerJob.getPrestige());
         placeholders.register("experience", format(playerJob.getExperience()));
         placeholders.register("max-experience", format(maxExperience));
 
         placeholders.register("level", format(playerJob.getLevel()));
-        placeholders.register("max-level", format(job.getMaxLevels()));
+        placeholders.register("max-level", format(this.job.getMaxLevels()));
 
         placeholders.register("prestige", format(playerJob.getPrestige()));
-        placeholders.register("max-prestige", format(job.getMaxPrestiges()));
+        placeholders.register("max-prestige", format(this.job.getMaxPrestiges()));
 
         placeholders.register("experience-progressbar", Config.progressBarExperience.getProgressBar(playerJob.getExperience(), maxExperience));
-        placeholders.register("level-progressbar", Config.progressBarLevel.getProgressBar(playerJob.getLevel(), job.getMaxLevels()));
-        placeholders.register("prestige-progressbar", Config.progressBarPrestige.getProgressBar(playerJob.getPrestige(), job.getMaxPrestiges()));
+        placeholders.register("level-progressbar", Config.progressBarLevel.getProgressBar(playerJob.getLevel(), this.job.getMaxLevels()));
+        placeholders.register("prestige-progressbar", Config.progressBarPrestige.getProgressBar(playerJob.getPrestige(), this.job.getMaxPrestiges()));
 
         return getItemStack().build(player, false, placeholders);
     }

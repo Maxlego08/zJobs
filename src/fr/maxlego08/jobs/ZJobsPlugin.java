@@ -18,6 +18,7 @@ import fr.maxlego08.jobs.zcore.ZPlugin;
 import fr.maxlego08.jobs.zcore.utils.plugins.Plugins;
 import fr.maxlego08.jobs.zmenu.buttons.JobValueButton;
 import fr.maxlego08.jobs.zmenu.loader.AddPointLoader;
+import fr.maxlego08.jobs.zmenu.loader.ClaimRewardLoader;
 import fr.maxlego08.jobs.zmenu.loader.JobInfoLoader;
 import fr.maxlego08.menu.api.ButtonManager;
 import fr.maxlego08.menu.api.InventoryManager;
@@ -31,6 +32,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -45,6 +48,7 @@ public class ZJobsPlugin extends ZPlugin {
     private final JobManager jobManager = new ZJobManager(this);
     private final StorageManager storageManager = new ZStorageManager(this);
     private final PaperComponent paperComponent = new PaperComponent();
+    private final Set<Integer> knowRewards = new HashSet<>();
     private InventoryManager inventoryManager;
     private ButtonManager buttonManager;
     private EconomyProvider economyProvider = new EmptyProvider();
@@ -145,6 +149,7 @@ public class ZJobsPlugin extends ZPlugin {
 
     private void loadActions() {
         this.buttonManager.registerAction(new AddPointLoader(this));
+        this.buttonManager.registerAction(new ClaimRewardLoader(this));
     }
 
     private void loadButtons() {
@@ -174,10 +179,13 @@ public class ZJobsPlugin extends ZPlugin {
 
     private void files(File folder, Consumer<File> consumer) {
         try (Stream<Path> s = Files.walk(Paths.get(folder.getPath()))) {
-            s.skip(1).map(Path::toFile).filter(File::isFile).filter(e -> e.getName().endsWith(".yml"))
-                    .forEach(consumer);
+            s.skip(1).map(Path::toFile).filter(File::isFile).filter(e -> e.getName().endsWith(".yml")).forEach(consumer);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    public Set<Integer> getKnowRewards() {
+        return knowRewards;
     }
 }

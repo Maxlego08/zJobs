@@ -53,6 +53,9 @@ public enum Message {
     DESCRIPTION_ADMIN_PRESTIGE_ADD("Add prestige to a player's job"),
     DESCRIPTION_ADMIN_PRESTIGE_SET("Define prestige to a player's job"),
     DESCRIPTION_ADMIN_PRESTIGE_REMOVE("Remove prestige to a player's job"),
+    DESCRIPTION_ADMIN_REWARD("Show admin rewards commands"),
+    DESCRIPTION_ADMIN_REWARD_SET("Define if a reward is claimed or not"),
+    DESCRIPTION_ADMIN_REWARD_INFO("Displays the rewards claimed by the player"),
     DESCRIPTION_ADMIN_POINTS("Show admin points commands"),
     DESCRIPTION_ADMIN_POINTS_ADD("Add points to a player"),
     DESCRIPTION_ADMIN_POINTS_INFO("Get player points info"),
@@ -107,6 +110,9 @@ public enum Message {
     ADMIN_BLOCKINFO_AGE(MessageType.WITHOUT_PREFIX, "&fBlock Age&8: &e%age%&8/&6%maxAge%"),
     ADMIN_BLOCKINFO_FOOTER(MessageType.WITHOUT_PREFIX, ""),
 
+    ADMIN_REWARD_ADD("&aYou just set the reward &f%reward% &ato &2true &afor &f%player%&a."),
+    ADMIN_REWARD_REMOVE("&aYou just set the reward &f%reward% &ato &cfalse &afor &f%player%&a."),
+
     ;
 
     private List<String> messages;
@@ -129,11 +135,11 @@ public enum Message {
     /**
      * Constructs a new Message with the specified title, subtitle, and timings.
      *
-     * @param title     the title string.
-     * @param subTitle  the subtitle string.
-     * @param a         the start time in ticks.
-     * @param b         the display time in ticks.
-     * @param c         the end time in ticks.
+     * @param title    the title string.
+     * @param subTitle the subtitle string.
+     * @param a        the start time in ticks.
+     * @param b        the display time in ticks.
+     * @param c        the end time in ticks.
      */
     Message(String title, String subTitle, int a, int b, int c) {
         this.use = true;
