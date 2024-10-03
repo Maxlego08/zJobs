@@ -43,5 +43,5 @@ public interface PlayerJobs {
 
     void removePoints(long points);
 
-    Set<Integer> getRewards();
+    Set<String> getRewards();
 }

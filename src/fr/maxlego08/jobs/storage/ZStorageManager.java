@@ -97,7 +97,7 @@ public class ZStorageManager implements StorageManager {
         List<PlayerJobDTO> playerJobDTOS = this.requestHelper.select(Tables.JOBS, PlayerJobDTO.class, table -> table.where("unique_id", uniqueId));
 
         long points = getPoints(uniqueId);
-        Set<Integer> integers = getRewards(uniqueId);
+        Set<String> integers = getRewards(uniqueId);
 
         return new ZPlayerJobs(this.plugin, uniqueId, playerJobDTOS.stream().map(ZPlayerJob::new).collect(Collectors.toList()), points, integers);
     }
@@ -136,7 +136,7 @@ public class ZStorageManager implements StorageManager {
     }
 
     @Override
-    public void upsert(UUID uniqueId, Set<Integer> rewards) {
+    public void upsert(UUID uniqueId, Set<String> rewards) {
         this.plugin.getScheduler().runTaskAsynchronously(() -> {
             this.requestHelper.upsert(Tables.REWARDS, table -> {
                 table.uuid("unique_id", uniqueId).primary();
@@ -218,9 +218,9 @@ public class ZStorageManager implements StorageManager {
     }
 
     @Override
-    public Set<Integer> getRewards(UUID uniqueId) {
+    public Set<String> getRewards(UUID uniqueId) {
         List<PlayerRewardDTO> playerRewardDTOS = this.requestHelper.select(Tables.REWARDS, PlayerRewardDTO.class, table -> table.where("unique_id", uniqueId));
         var reward = playerRewardDTOS.isEmpty() ? "" : playerRewardDTOS.get(0).content();
-        return reward.length() == 0 ? new HashSet<>() : Arrays.stream(reward.split(",")).map(Integer::parseInt).collect(Collectors.toSet());
+        return reward.length() == 0 ? new HashSet<>() : Arrays.stream(reward.split(",")).collect(Collectors.toSet());
     }
 }

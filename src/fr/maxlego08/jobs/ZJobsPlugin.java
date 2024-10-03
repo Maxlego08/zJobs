@@ -48,7 +48,7 @@ public class ZJobsPlugin extends ZPlugin {
     private final JobManager jobManager = new ZJobManager(this);
     private final StorageManager storageManager = new ZStorageManager(this);
     private final PaperComponent paperComponent = new PaperComponent();
-    private final Set<Integer> knowRewards = new HashSet<>();
+    private final Set<String> knowRewards = new HashSet<>();
     private InventoryManager inventoryManager;
     private ButtonManager buttonManager;
     private EconomyProvider economyProvider = new EmptyProvider();
@@ -71,6 +71,9 @@ public class ZJobsPlugin extends ZPlugin {
         this.inventoryManager = getProvider(InventoryManager.class);
         this.buttonManager = getProvider(ButtonManager.class);
 
+        this.loadActions();
+        this.loadButtons();
+
         this.addSave(new MessageLoader(this));
         this.addListener(new JobListener(this));
 
@@ -88,8 +91,6 @@ public class ZJobsPlugin extends ZPlugin {
             this.blockHook = new BlockTrackerHook();
         }
 
-        this.loadActions();
-        this.loadButtons();
         this.loadInventories();
 
         this.postEnable();
@@ -121,6 +122,7 @@ public class ZJobsPlugin extends ZPlugin {
     @Override
     public void reloadFiles() {
         this.reloadConfig();
+        this.knowRewards.clear();
         this.jobManager.loadJobs();
         Config.getInstance().loadConfiguration(getConfig(), this);
         this.loadInventories();
@@ -185,7 +187,7 @@ public class ZJobsPlugin extends ZPlugin {
         }
     }
 
-    public Set<Integer> getKnowRewards() {
+    public Set<String> getKnowRewards() {
         return knowRewards;
     }
 }

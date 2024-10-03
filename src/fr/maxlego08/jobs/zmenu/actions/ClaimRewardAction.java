@@ -10,9 +10,9 @@ import org.bukkit.entity.Player;
 public class ClaimRewardAction extends Action {
 
     private final ZJobsPlugin plugin;
-    private final int reward;
+    private final String reward;
 
-    public ClaimRewardAction(ZJobsPlugin plugin, int reward) {
+    public ClaimRewardAction(ZJobsPlugin plugin, String reward) {
         this.plugin = plugin;
         this.reward = reward;
     }

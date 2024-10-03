@@ -53,5 +53,5 @@ public interface JobManager {
 
     void setTargetJob(Player player, Job job);
 
-    void setReward(CommandSender sender, OfflinePlayer offlinePlayer, int rewardId, boolean rewardStatus);
+    void setReward(CommandSender sender, OfflinePlayer offlinePlayer, String rewardId, boolean rewardStatus);
 }

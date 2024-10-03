@@ -23,8 +23,10 @@ public class ClaimRewardLoader implements ActionLoader {
 
     @Override
     public Action load(String path, TypedMapAccessor accessor, File file) {
-        int rewardId = accessor.getInt("reward");
-        this.plugin.getKnowRewards().add(rewardId);
+        String rewardId = accessor.getString("reward");
+        if (!this.plugin.getKnowRewards().add(rewardId)) {
+            this.plugin.getLogger().severe("Attention ! You have defined the ID " + rewardId + " several times!");
+        }
         return new ClaimRewardAction(plugin, rewardId);
     }
 }

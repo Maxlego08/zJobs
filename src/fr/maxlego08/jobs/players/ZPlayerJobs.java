@@ -34,13 +34,13 @@ public class ZPlayerJobs implements PlayerJobs {
     private final ZJobsPlugin plugin;
     private final UUID uniqueId;
     private final List<PlayerJob> jobs;
-    private final Set<Integer> rewards;
+    private final Set<String> rewards;
     private JobBossBar jobBossBar;
     private long points;
     private double updateMoney;
 
 
-    public ZPlayerJobs(ZJobsPlugin plugin, UUID uniqueId, List<PlayerJob> jobs, long points, Set<Integer> rewards) {
+    public ZPlayerJobs(ZJobsPlugin plugin, UUID uniqueId, List<PlayerJob> jobs, long points, Set<String> rewards) {
         this.plugin = plugin;
         this.uniqueId = uniqueId;
         this.jobs = jobs;
@@ -269,7 +269,7 @@ public class ZPlayerJobs implements PlayerJobs {
     }
 
     @Override
-    public Set<Integer> getRewards() {
+    public Set<String> getRewards() {
         return this.rewards;
     }
 }

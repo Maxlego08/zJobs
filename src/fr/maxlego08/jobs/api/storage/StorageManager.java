@@ -16,7 +16,7 @@ public interface StorageManager {
 
     void upsert(UUID uniqueId, long points);
 
-    void upsert(UUID uniqueId, Set<Integer> rewards);
+    void upsert(UUID uniqueId, Set<String> rewards);
 
     void deleteJob(UUID uniqueId, String fileName);
 
@@ -24,5 +24,5 @@ public interface StorageManager {
 
     long getPoints(UUID uniqueId);
 
-    Set<Integer> getRewards(UUID uniqueId);
+    Set<String> getRewards(UUID uniqueId);
 }

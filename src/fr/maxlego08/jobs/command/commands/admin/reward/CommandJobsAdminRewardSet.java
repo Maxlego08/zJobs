@@ -17,7 +17,7 @@ public class CommandJobsAdminRewardSet extends VCommand {
         this.addSubCommand("set");
         this.setDescription(Message.DESCRIPTION_ADMIN_REWARD_SET);
         this.addRequireArg("player");
-        this.addRequireArg("reward id", (a, b) -> plugin.getKnowRewards().stream().map(String::valueOf).toList());
+        this.addRequireArg("reward id", (a, b) -> plugin.getKnowRewards().stream().toList());
         this.addRequireArg("true/false", (a, b) -> Arrays.asList("true", "false"));
     }
 
@@ -25,7 +25,7 @@ public class CommandJobsAdminRewardSet extends VCommand {
     protected CommandType perform(ZJobsPlugin plugin) {
 
         OfflinePlayer offlinePlayer = this.argAsOfflinePlayer(0);
-        int rewardId = this.argAsInteger(1);
+        String rewardId = this.argAsString(1);
         boolean rewardStatus = this.argAsBoolean(2);
 
         plugin.getJobManager().setReward(this.sender, offlinePlayer, rewardId, rewardStatus);

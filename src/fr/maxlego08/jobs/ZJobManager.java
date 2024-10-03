@@ -54,9 +54,8 @@ public class ZJobManager extends ZUtils implements JobManager {
 
         placeholder.register("reward_is_claim_", (player, rewardId) -> {
             try {
-                int id = Integer.parseInt(rewardId);
                 var optional = getPlayerJobs(player.getUniqueId());
-                return optional.map(playerJobs -> playerJobs.getRewards().contains(id)).orElse(false).toString();
+                return optional.map(playerJobs -> playerJobs.getRewards().contains(rewardId)).orElse(false).toString();
             } catch (Exception exception) {
                 return "Reward " + rewardId + " is not an integer !";
             }
@@ -380,7 +379,7 @@ public class ZJobManager extends ZUtils implements JobManager {
     }
 
     @Override
-    public void setReward(CommandSender sender, OfflinePlayer offlinePlayer, int rewardId, boolean rewardStatus) {
+    public void setReward(CommandSender sender, OfflinePlayer offlinePlayer, String rewardId, boolean rewardStatus) {
         var optional = getPlayerJobs(offlinePlayer.getUniqueId());
         if (optional.isPresent()) {
             setReward(sender, offlinePlayer, rewardId, rewardStatus, optional.get().getRewards());
@@ -389,7 +388,7 @@ public class ZJobManager extends ZUtils implements JobManager {
         }
     }
 
-    private void setReward(CommandSender sender, OfflinePlayer offlinePlayer, int rewardId, boolean rewardStatus, Set<Integer> rewards) {
+    private void setReward(CommandSender sender, OfflinePlayer offlinePlayer, String rewardId, boolean rewardStatus, Set<String> rewards) {
 
         if (rewardStatus) rewards.add(rewardId);
         else rewards.remove(rewardId);
