@@ -1,7 +1,6 @@
 package fr.maxlego08.jobs.zmenu.loader;
 
 import fr.maxlego08.jobs.ZJobsPlugin;
-import fr.maxlego08.jobs.zmenu.actions.AddPointsAction;
 import fr.maxlego08.jobs.zmenu.actions.ClaimRewardAction;
 import fr.maxlego08.menu.api.loader.ActionLoader;
 import fr.maxlego08.menu.api.requirement.Action;
@@ -25,6 +24,7 @@ public class ClaimRewardLoader implements ActionLoader {
     @Override
     public Action load(String path, TypedMapAccessor accessor, File file) {
         int rewardId = accessor.getInt("reward");
+        this.plugin.getKnowRewards().add(rewardId);
         return new ClaimRewardAction(plugin, rewardId);
     }
 }
